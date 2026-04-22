@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jotun Area Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red:    #C0392B;
+    --red-dk: #96281B;
+    --bg:     #F5F3EE;
+    --surface:#FFFFFF;
+    --border: #D8D3C8;
+    --text:   #1A1814;
+    --muted:  #7A756C;
+    --worst:  #7B2D00;
+    --worst-bg:#FDF0E8;
+    --worst-bd:#E8C4A8;
+    --best:   #1A4D2E;
+    --best-bg: #EAF4EC;
+    --best-bd: #A8D4B4;
+    --input-bg:#FAFAF7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--red);
+    padding: 20px 24px 16px;
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+  }
+  .logo-block {
+    width: 36px; height: 36px;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-block span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    color: var(--red);
+    font-size: 14px;
+    letter-spacing: -1px;
+  }
+  .header-text h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+  .header-text p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Main ── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 16px 48px;
+  }
+
+  /* ── Row card ── */
+  .row-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+    transition: box-shadow 0.15s;
+  }
+  .row-card:focus-within {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  .row-top {
+    display: grid;
+    grid-template-columns: 28px 1fr 1fr 120px;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .row-num {
+    background: var(--text);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .input-cell {
+    padding: 10px 12px;
+    border-right: 1px solid var(--border);
+  }
+  .input-cell:last-child { border-right: none; }
+
+  .input-cell label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+  }
+
+  .input-cell select,
+  .input-cell input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .input-cell select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237A756C'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0 center; padding-right: 14px; }
+  .input-cell input[type=number] { cursor: text; }
+  .input-cell input::placeholder { color: var(--border); font-weight: 400; }
+
+  /* ── Results ── */
+  .row-results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .result-block {
+    padding: 12px 14px;
+  }
+  .result-block.worst {
+    background: var(--worst-bg);
+    border-right: 1px solid var(--worst-bd);
+  }
+  .result-block.best {
+    background: var(--best-bg);
+  }
+
+  .result-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .worst .result-label { color: var(--worst); }
+  .best  .result-label { color: var(--best);  }
+
+  .result-empty {
+    font-size: 12px;
+    color: var(--border);
+    font-style: italic;
+  }
+
+  .qty-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .qty-item {}
+  .qty-item .qty-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .worst .qty-num { color: var(--worst); }
+  .best  .qty-num { color: var(--best);  }
+
+  .qty-item .qty-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+  .qty-item .qty-sub {
+    font-size: 9px;
+    color: var(--border);
+    margin-top: 1px;
+  }
+
+  .liters-tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 2px 6px;
+    margin-bottom: 8px;
+    border-radius: 2px;
+  }
+  .worst .liters-tag { background: var(--worst-bd); color: var(--worst); }
+  .best  .liters-tag { background: var(--best-bd);  color: var(--best);  }
+
+  /* ── Add row button ── */
+  .add-row-btn {
+    width: 100%;
+    padding: 12px;
+    background: none;
+    border: 1px dashed var(--border);
+    color: var(--muted);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s;
+    margin-top: 4px;
+  }
+  .add-row-btn:hover {
+    border-color: var(--red);
+    color: var(--red);
+    background: #FEF9F9;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 14px 0 0;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+  }
+  .legend-item {
+    font-size: 10px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .row-top {
+      grid-template-columns: 28px 1fr 1fr;
+    }
+    .row-top .area-cell {
+      grid-column: 1 / -1;
+      border-top: 1px solid var(--border);
+      border-right: none;
+    }
+    .qty-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .qty-item .qty-num { font-size: 18px; }
+  }
+
+  @media (max-width: 400px) {
+    .row-results { grid-template-columns: 1fr; }
+    .result-block.worst { border-right: none; border-bottom: 1px solid var(--worst-bd); }
+  }
+
+  /* ── Zero state ── */
+  .zero { color: var(--border) !important; }
+
+  /* ── Price inputs ── */
+  .price-section {
+    border-top: 1px solid var(--border);
+    padding: 12px 14px;
+    background: var(--input-bg);
+  }
+  .price-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+  }
+  .price-inputs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .price-input-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 90px;
+  }
+  .price-input-item label {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .price-input-item input {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    padding: 7px 10px;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+  .price-input-item input:focus { border-color: var(--red); }
+  .price-input-item input::placeholder { color: var(--border); font-weight: 400; }
+  .price-input-item.hidden { display: none; }
+
+  /* ── Cost results ── */
+  .cost-results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .cost-block {
+    padding: 12px 14px;
+  }
+  .cost-block.worst-cost { background: var(--worst-bg); border-right: 1px solid var(--worst-bd); }
+  .cost-block.best-cost  { background: var(--best-bg); }
+  .cost-block-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .worst-cost .cost-block-label { color: var(--worst); }
+  .best-cost  .cost-block-label { color: var(--best); }
+  .cost-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .cost-row-label {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .cost-row-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .worst-cost .cost-row-value { color: var(--worst); }
+  .best-cost  .cost-row-value { color: var(--best); }
+  .cost-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px solid var(--worst-bd);
+    padding-top: 7px;
+    margin-top: 7px;
+  }
+  .best-cost  .cost-total-row { border-top-color: var(--best-bd); }
+  .cost-total-label { font-size: 11px; font-weight: 600; color: var(--muted); }
+  .cost-total-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .worst-cost .cost-total-value { color: var(--worst); }
+  .best-cost  .cost-total-value { color: var(--best); }
+  .cost-per-m2 {
+    font-size: 10px;
+    margin-top: 4px;
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .worst-cost .cost-per-m2 { color: var(--worst); opacity: 0.7; }
+  .best-cost  .cost-per-m2 { color: var(--best);  opacity: 0.7; }
+  .cost-empty { font-size: 11px; color: var(--border); font-style: italic; }
+
+  @media (max-width: 400px) {
+    .cost-results { grid-template-columns: 1fr; }
+    .cost-block.worst-cost { border-right: none; border-bottom: 1px solid var(--worst-bd); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-block"><span>JT</span></div>
+  <div class="header-text">
+    <h1>AREA CALCULATOR</h1>
+    <p>Jotun Paint · Quantity Estimator</p>
+  </div>
+</header>
+
+<main>
+  <div id="rows-container"></div>
+  <button class="add-row-btn" onclick="addRow()">+ Add Row</button>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--worst-bg);border:1px solid var(--worst-bd)"></div> Worst = min coverage (order this)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--best-bg);border:1px solid var(--best-bd)"></div> Best = max coverage (minimum possible)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e0e0e0"></div> Pails ≥ 15L · Gallons 2.5–5L · Cans 0.9–1L</div>
+  </div>
+</main>
+
+<script>
+const PRODUCTS = {
+  "JOTASHIELD INFINITY": { category: "Exterior", minCov: 9.5, maxCov: 12.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "JOTASHIELD ULTRA CLEAN": { category: "Exterior", minCov: 9.5, maxCov: 12.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "JOTASHIELD ANTIFADE": { category: "Exterior", minCov: 9.8, maxCov: 13.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "JOTASHIELD FLEX": { category: "Exterior", minCov: 5.0, maxCov: 7.5, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "TOUGH SHIELD MAX": { category: "Exterior", minCov: 9.3, maxCov: 12.3, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "TOUGH SHIELD MATT": { category: "Exterior", minCov: 9.3, maxCov: 12.3, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "WATERGUARD": { category: "Exterior", minCov: 5.5, maxCov: 7.5, pailSz: 15.0, gallonSz: 3.5, canSz: 0.9 },
+  "JOTAROOF": { category: "Exterior", minCov: 9.8, maxCov: 13.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "MAJESTIC PURE COLOR": { category: "Interior", minCov: 10.5, maxCov: 14.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "MAJESTIC SENSE": { category: "Interior", minCov: 5.9, maxCov: 8.2, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "MAJESTIC TRUE BEAUTY SHEEN": { category: "Interior", minCov: 9.0, maxCov: 12.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "MAJESTIC TRUE BEAUTY MATT": { category: "Interior", minCov: 9.0, maxCov: 12.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "ESSENCE COVER PLUS": { category: "Interior", minCov: 8.7, maxCov: 11.6, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "ESSENCE EASY WIPE": { category: "Interior", minCov: 9.3, maxCov: 11.3, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "JOTAPLAST": { category: "Interior", minCov: 9.0, maxCov: 12.0, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "CITO PRIMER": { category: "Primer", minCov: 6.3, maxCov: 8.3, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "ULTRA PRIMER": { category: "Primer", minCov: 8.0, maxCov: 10.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "JOTASHIELD PRIMER": { category: "Primer", minCov: 8.0, maxCov: 10.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "MAJESTIC PRIMER": { category: "Primer", minCov: 8.0, maxCov: 10.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "TOUGH SHIELD PRIMER": { category: "Primer", minCov: 8.8, maxCov: 11.6, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "ESSENCE EASY PRIMER": { category: "Primer", minCov: 8.8, maxCov: 11.6, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "JOTAPLAST PRIMER": { category: "Primer", minCov: 9.0, maxCov: 12.0, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "GARDEX PRIMER": { category: "Primer", minCov: 10.0, maxCov: 17.0, pailSz: 0, gallonSz: 5.0, canSz: 1.0 },
+  "GARDEX PREMIUM GLOSS": { category: "W&M", minCov: 12.0, maxCov: 16.0, pailSz: 0, gallonSz: 5.0, canSz: 0.9 },
+  "MAJESTIC SUPREME FINISH": { category: "W&M", minCov: 9.5, maxCov: 12.7, pailSz: 0, gallonSz: 5.0, canSz: 0.9 },
+  "MAJESTIC PRIMER WOOD & METAL": { category: "W&M Primer", minCov: 7.8, maxCov: 13.0, pailSz: 0, gallonSz: 5.0, canSz: 0.9 }
+};
+const CATEGORIES = ["Exterior", "Interior", "Primer", "W&M", "W&M Primer"];
+
+let rowCount = 0;
+
+function getCoats(product) {
+  return (product.category === 'Primer' || product.category === 'W&M Primer') ? 1 : 2;
+}
+
+function calcLiters(area, coverage, coats) {
+  return Math.ceil((area / coverage * coats) * 10) / 10;
+}
+
+function breakdown(liters, p) {
+  let pails = 0, gallons = 0, cans = 0;
+  let rem = liters;
+
+  if (p.pailSz > 0) {
+    pails = Math.floor(rem / p.pailSz);
+    rem = rem - pails * p.pailSz;
+  }
+  if (p.gallonSz > 0 && rem > 0) {
+    gallons = Math.ceil(rem / p.gallonSz);
+    rem = rem - gallons * p.gallonSz;
+  }
+  if (p.canSz > 0 && rem > 0) {
+    cans = Math.ceil(rem / p.canSz);
+  }
+  return { pails, gallons, cans };
+}
+
+function fmt(n) {
+  return 'Rp ' + Math.round(n).toLocaleString('id-ID');
+}
+
+function renderQty(liters, bd, type) {
+  const { pails, gallons, cans } = bd;
+  const qtyItem = (num, label) => `
+    <div class="qty-item">
+      <div class="qty-num ${num === 0 ? 'zero' : ''}">${num}</div>
+      <div class="qty-label">${label}</div>
+    </div>`;
+  return `
+    <span class="liters-tag">${liters.toFixed(1)} L total</span>
+    <div class="qty-grid">
+      ${qtyItem(pails,   'Pails')}
+      ${qtyItem(gallons, 'Gallons')}
+      ${qtyItem(cans,    'Cans')}
+    </div>`;
+}
+
+function calcCost(bd, pailPrice, gallonPrice, canPrice) {
+  return bd.pails * pailPrice + bd.gallons * gallonPrice + bd.cans * canPrice;
+}
+
+function updateRow(id) {
+  const prodEl  = document.getElementById(`prod-${id}`);
+  const areaEl  = document.getElementById(`area-${id}`);
+  const worstEl = document.getElementById(`worst-${id}`);
+  const bestEl  = document.getElementById(`best-${id}`);
+  const wCostEl = document.getElementById(`worst-cost-${id}`);
+  const bCostEl = document.getElementById(`best-cost-${id}`);
+
+  const prodName = prodEl.value;
+  const area     = parseFloat(areaEl.value);
+  const p        = PRODUCTS[prodName];
+
+  if (!p || !area || area <= 0) {
+    worstEl.innerHTML = `<div class="result-label">WORST CASE</div><div class="result-empty">Enter product and area</div>`;
+    bestEl.innerHTML  = `<div class="result-label">BEST CASE</div><div class="result-empty">Enter product and area</div>`;
+    if (wCostEl) wCostEl.innerHTML = `<div class="cost-block-label">WORST — TOTAL COST</div><div class="cost-empty">—</div>`;
+    if (bCostEl) bCostEl.innerHTML = `<div class="cost-block-label">BEST — TOTAL COST</div><div class="cost-empty">—</div>`;
+    return;
+  }
+
+  const coats   = getCoats(p);
+  const worstL  = calcLiters(area, p.minCov, coats);
+  const bestL   = calcLiters(area, p.maxCov, coats);
+  const worstBd = breakdown(worstL, p);
+  const bestBd  = breakdown(bestL, p);
+
+  worstEl.innerHTML = `<div class="result-label">WORST CASE</div>${renderQty(worstL, worstBd, 'worst')}`;
+  bestEl.innerHTML  = `<div class="result-label">BEST CASE</div>${renderQty(bestL, bestBd, 'best')}`;
+
+  // Show/hide price inputs based on product sizes
+  const pailWrap   = document.getElementById(`price-pail-wrap-${id}`);
+  const gallonWrap = document.getElementById(`price-gallon-wrap-${id}`);
+  const canWrap    = document.getElementById(`price-can-wrap-${id}`);
+  if (pailWrap)   pailWrap.classList.toggle('hidden',   p.pailSz === 0);
+  if (gallonWrap) gallonWrap.classList.toggle('hidden', p.gallonSz === 0);
+  if (canWrap)    canWrap.classList.toggle('hidden',    p.canSz === 0);
+
+  updateCost(id);
+}
+
+function updateCost(id) {
+  const prodEl  = document.getElementById(`prod-${id}`);
+  const areaEl  = document.getElementById(`area-${id}`);
+  const wCostEl = document.getElementById(`worst-cost-${id}`);
+  const bCostEl = document.getElementById(`best-cost-${id}`);
+
+  const prodName   = prodEl.value;
+  const area       = parseFloat(areaEl.value);
+  const p          = PRODUCTS[prodName];
+  if (!p || !area || area <= 0) return;
+
+  const pailPrice   = parseFloat(document.getElementById(`price-pail-${id}`)?.value)   || 0;
+  const gallonPrice = parseFloat(document.getElementById(`price-gallon-${id}`)?.value) || 0;
+  const canPrice    = parseFloat(document.getElementById(`price-can-${id}`)?.value)    || 0;
+
+  if (!pailPrice && !gallonPrice && !canPrice) {
+    if (wCostEl) wCostEl.innerHTML = `<div class="cost-block-label">WORST — TOTAL COST</div><div class="cost-empty">Enter prices above</div>`;
+    if (bCostEl) bCostEl.innerHTML = `<div class="cost-block-label">BEST — TOTAL COST</div><div class="cost-empty">Enter prices above</div>`;
+    return;
+  }
+
+  const coats   = getCoats(p);
+  const worstL  = calcLiters(area, p.minCov, coats);
+  const bestL   = calcLiters(area, p.maxCov, coats);
+  const worstBd = breakdown(worstL, p);
+  const bestBd  = breakdown(bestL, p);
+
+  const worstCost = calcCost(worstBd, pailPrice, gallonPrice, canPrice);
+  const bestCost  = calcCost(bestBd,  pailPrice, gallonPrice, canPrice);
+
+  function costRows(bd, price, label, cls) {
+    const rows = [];
+    if (p.pailSz > 0 && bd.pails > 0)
+      rows.push(`<div class="cost-row"><span class="cost-row-label">${bd.pails} pail${bd.pails!==1?'s':''} × ${fmt(pailPrice)}</span><span class="cost-row-value">${fmt(bd.pails*pailPrice)}</span></div>`);
+    if (p.gallonSz > 0 && bd.gallons > 0)
+      rows.push(`<div class="cost-row"><span class="cost-row-label">${bd.gallons} gallon${bd.gallons!==1?'s':''} × ${fmt(gallonPrice)}</span><span class="cost-row-value">${fmt(bd.gallons*gallonPrice)}</span></div>`);
+    if (p.canSz > 0 && bd.cans > 0)
+      rows.push(`<div class="cost-row"><span class="cost-row-label">${bd.cans} can${bd.cans!==1?'s':''} × ${fmt(canPrice)}</span><span class="cost-row-value">${fmt(bd.cans*canPrice)}</span></div>`);
+    const perM2 = area > 0 ? price / area : 0;
+    return `<div class="cost-block-label">${label}</div>
+      ${rows.join('')}
+      <div class="cost-total-row">
+        <span class="cost-total-label">TOTAL</span>
+        <span class="cost-total-value">${fmt(price)}</span>
+      </div>
+      <div class="cost-per-m2">${fmt(perM2)} / m²</div>`;
+  }
+
+  if (wCostEl) wCostEl.innerHTML = costRows(worstBd, worstCost, 'WORST — TOTAL COST', 'worst');
+  if (bCostEl) bCostEl.innerHTML = costRows(bestBd,  bestCost,  'BEST — TOTAL COST',  'best');
+}
+
+function updateProductDropdown(id) {
+  const catEl  = document.getElementById(`cat-${id}`);
+  const prodEl = document.getElementById(`prod-${id}`);
+  const cat    = catEl.value;
+
+  prodEl.innerHTML = `<option value="">Select product...</option>`;
+  Object.entries(PRODUCTS).forEach(([name, p]) => {
+    if (p.category === cat) {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      prodEl.appendChild(opt);
+    }
+  });
+  updateRow(id);
+}
+
+function addRow() {
+  rowCount++;
+  const id = rowCount;
+  const container = document.getElementById('rows-container');
+
+  const card = document.createElement('div');
+  card.className = 'row-card';
+  card.id = `row-${id}`;
+
+  const catOptions = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
+
+  card.innerHTML = `
+    <div class="row-top">
+      <div class="row-num">${id}</div>
+      <div class="input-cell">
+        <label>Category</label>
+        <select id="cat-${id}" onchange="updateProductDropdown(${id})">
+          <option value="">Select...</option>
+          ${catOptions}
+        </select>
+      </div>
+      <div class="input-cell">
+        <label>Product</label>
+        <select id="prod-${id}" onchange="updateRow(${id})">
+          <option value="">Select product...</option>
+        </select>
+      </div>
+      <div class="input-cell area-cell">
+        <label>Area (m²)</label>
+        <input type="number" id="area-${id}" placeholder="0" min="0" step="0.5"
+               oninput="updateRow(${id})">
+      </div>
+    </div>
+    <div class="row-results">
+      <div class="result-block worst" id="worst-${id}">
+        <div class="result-label">WORST CASE</div>
+        <div class="result-empty">Enter product and area</div>
+      </div>
+      <div class="result-block best" id="best-${id}">
+        <div class="result-label">BEST CASE</div>
+        <div class="result-empty">Enter product and area</div>
+      </div>
+    </div>
+    <div class="price-section">
+      <div class="price-section-label">Price per Unit (Rp)</div>
+      <div class="price-inputs">
+        <div class="price-input-item" id="price-pail-wrap-${id}">
+          <label>Pail</label>
+          <input type="number" id="price-pail-${id}" placeholder="0" min="0"
+                 oninput="updateCost(${id})">
+        </div>
+        <div class="price-input-item" id="price-gallon-wrap-${id}">
+          <label>Gallon</label>
+          <input type="number" id="price-gallon-${id}" placeholder="0" min="0"
+                 oninput="updateCost(${id})">
+        </div>
+        <div class="price-input-item" id="price-can-wrap-${id}">
+          <label>Can</label>
+          <input type="number" id="price-can-${id}" placeholder="0" min="0"
+                 oninput="updateCost(${id})">
+        </div>
+      </div>
+    </div>
+    <div class="cost-results">
+      <div class="cost-block worst-cost" id="worst-cost-${id}">
+        <div class="cost-block-label">WORST — TOTAL COST</div>
+        <div class="cost-empty">—</div>
+      </div>
+      <div class="cost-block best-cost" id="best-cost-${id}">
+        <div class="cost-block-label">BEST — TOTAL COST</div>
+        <div class="cost-empty">—</div>
+      </div>
+    </div>`;
+
+  container.appendChild(card);
+}
+
+// Start with 3 rows
+addRow(); addRow(); addRow();
+</script>
+</body>
+</html>
