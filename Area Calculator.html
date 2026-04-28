@@ -136,13 +136,76 @@
   .input-cell input::placeholder { color: var(--border); font-weight: 400; }
 
   /* ── Results ── */
+
+  /* Average — primary, full width, prominent */
+  .result-avg {
+    padding: 16px 16px 12px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .avg-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .avg-label::after {
+    content: 'RECOMMENDED';
+    font-size: 9px;
+    background: var(--red);
+    color: #fff;
+    padding: 1px 6px;
+    letter-spacing: 0.8px;
+  }
+  .avg-liters-tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 10px;
+    margin-bottom: 12px;
+    background: #F5F3EE;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .avg-qty-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .avg-qty-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .avg-qty-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--text);
+  }
+  .avg-qty-num.zero { color: var(--border); }
+  .avg-qty-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Worst / Best — secondary, compact, side by side */
   .row-results {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--border);
   }
-
   .result-block {
-    padding: 12px 14px;
+    padding: 10px 12px;
   }
   .result-block.worst {
     background: var(--worst-bg);
@@ -151,58 +214,46 @@
   .result-block.best {
     background: var(--best-bg);
   }
-
   .result-label {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .worst .result-label { color: var(--worst); }
   .best  .result-label { color: var(--best);  }
-
   .result-empty {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--border);
     font-style: italic;
   }
-
   .qty-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
   }
-
-  .qty-item {}
   .qty-item .qty-num {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 600;
     line-height: 1;
   }
   .worst .qty-num { color: var(--worst); }
   .best  .qty-num { color: var(--best);  }
-
   .qty-item .qty-label {
-    font-size: 10px;
+    font-size: 9px;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 2px;
   }
-  .qty-item .qty-sub {
-    font-size: 9px;
-    color: var(--border);
-    margin-top: 1px;
-  }
-
   .liters-tag {
     display: inline-block;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    padding: 2px 6px;
-    margin-bottom: 8px;
+    font-size: 10px;
+    padding: 1px 5px;
+    margin-bottom: 6px;
     border-radius: 2px;
   }
   .worst .liters-tag { background: var(--worst-bd); color: var(--worst); }
@@ -254,24 +305,17 @@
 
   /* ── Responsive ── */
   @media (max-width: 600px) {
-    .row-top {
-      grid-template-columns: 28px 1fr 1fr;
-    }
-    .row-top .area-cell {
-      grid-column: 1 / -1;
-      border-top: 1px solid var(--border);
-      border-right: none;
-    }
-    .qty-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-    .qty-item .qty-num { font-size: 18px; }
+    .row-top { grid-template-columns: 28px 1fr 1fr; }
+    .row-top .area-cell { grid-column: 1 / -1; border-top: 1px solid var(--border); border-right: none; }
+    .avg-qty-grid { grid-template-columns: repeat(3, 1fr); }
+    .avg-qty-num { font-size: 26px; }
+    .qty-grid { grid-template-columns: repeat(3, 1fr); }
   }
-
   @media (max-width: 400px) {
     .row-results { grid-template-columns: 1fr; }
     .result-block.worst { border-right: none; border-bottom: 1px solid var(--worst-bd); }
+    .cost-results { grid-template-columns: 1fr; }
+    .cost-block.worst-cost { border-right: none; border-bottom: 1px solid var(--worst-bd); }
   }
 
   /* ── Zero state ── */
@@ -325,7 +369,55 @@
   .price-input-item input::placeholder { color: var(--border); font-weight: 400; }
   .price-input-item.hidden { display: none; }
 
-  /* ── Cost results ── */
+  /* ── Average cost ── */
+  .avg-cost-block {
+    padding: 14px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .avg-cost-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+  .avg-cost-rows { margin-bottom: 8px; }
+  .avg-cost-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5px;
+    font-size: 12px;
+  }
+  .avg-cost-row-label { color: var(--muted); }
+  .avg-cost-row-value { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--text); }
+  .avg-cost-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 2px solid var(--text);
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+  .avg-cost-total-label { font-size: 12px; font-weight: 600; }
+  .avg-cost-total-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .avg-cost-per-m2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 600;
+    text-align: right;
+    margin-top: 4px;
+  }
+
+  /* ── Cost results (worst/best) ── */
   .cost-results {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -487,11 +579,27 @@ function renderQty(liters, bd, type) {
       <div class="qty-label">${label}</div>
     </div>`;
   return `
-    <span class="liters-tag">${liters.toFixed(1)} L total</span>
+    <span class="liters-tag">${liters.toFixed(1)} L</span>
     <div class="qty-grid">
       ${qtyItem(pails,   'Pails')}
       ${qtyItem(gallons, 'Gallons')}
       ${qtyItem(cans,    'Cans')}
+    </div>`;
+}
+
+function renderAvgQty(liters, bd) {
+  const { pails, gallons, cans } = bd;
+  const item = (num, label) => `
+    <div class="avg-qty-item">
+      <div class="avg-qty-num ${num === 0 ? 'zero' : ''}">${num}</div>
+      <div class="avg-qty-label">${label}</div>
+    </div>`;
+  return `
+    <span class="avg-liters-tag">${liters.toFixed(1)} L total</span>
+    <div class="avg-qty-grid">
+      ${item(pails,   'Pails')}
+      ${item(gallons, 'Gallons')}
+      ${item(cans,    'Cans')}
     </div>`;
 }
 
@@ -500,35 +608,45 @@ function calcCost(bd, pailPrice, gallonPrice, canPrice) {
 }
 
 function updateRow(id) {
-  const prodEl  = document.getElementById(`prod-${id}`);
-  const areaEl  = document.getElementById(`area-${id}`);
-  const worstEl = document.getElementById(`worst-${id}`);
-  const bestEl  = document.getElementById(`best-${id}`);
-  const wCostEl = document.getElementById(`worst-cost-${id}`);
-  const bCostEl = document.getElementById(`best-cost-${id}`);
+  const prodEl   = document.getElementById(`prod-${id}`);
+  const areaEl   = document.getElementById(`area-${id}`);
+  const avgEl    = document.getElementById(`avg-${id}`);
+  const worstEl  = document.getElementById(`worst-${id}`);
+  const bestEl   = document.getElementById(`best-${id}`);
 
   const prodName = prodEl.value;
   const area     = parseFloat(areaEl.value);
   const p        = PRODUCTS[prodName];
 
+  const empty = `<div class="result-empty">Enter product and area</div>`;
+
   if (!p || !area || area <= 0) {
-    worstEl.innerHTML = `<div class="result-label">WORST CASE</div><div class="result-empty">Enter product and area</div>`;
-    bestEl.innerHTML  = `<div class="result-label">BEST CASE</div><div class="result-empty">Enter product and area</div>`;
-    if (wCostEl) wCostEl.innerHTML = `<div class="cost-block-label">WORST — TOTAL COST</div><div class="cost-empty">—</div>`;
-    if (bCostEl) bCostEl.innerHTML = `<div class="cost-block-label">BEST — TOTAL COST</div><div class="cost-empty">—</div>`;
+    avgEl.innerHTML   = `<div class="avg-label">AVERAGE</div>${empty}`;
+    worstEl.innerHTML = `<div class="result-label">WORST CASE</div>${empty}`;
+    bestEl.innerHTML  = `<div class="result-label">BEST CASE</div>${empty}`;
+    const acEl = document.getElementById(`avg-cost-${id}`);
+    const wCostEl = document.getElementById(`worst-cost-${id}`);
+    const bCostEl = document.getElementById(`best-cost-${id}`);
+    if (acEl)    acEl.innerHTML    = `<div class="avg-cost-label">AVERAGE — TOTAL COST</div><div class="result-empty">—</div>`;
+    if (wCostEl) wCostEl.innerHTML = `<div class="cost-block-label">WORST</div><div class="cost-empty">—</div>`;
+    if (bCostEl) bCostEl.innerHTML = `<div class="cost-block-label">BEST</div><div class="cost-empty">—</div>`;
     return;
   }
 
-  const coats   = getCoats(p);
-  const worstL  = calcLiters(area, p.minCov, coats);
-  const bestL   = calcLiters(area, p.maxCov, coats);
-  const worstBd = breakdown(worstL, p);
-  const bestBd  = breakdown(bestL, p);
+  const coats  = getCoats(p);
+  const avgCov = (p.minCov + p.maxCov) / 2;
+  const avgL   = calcLiters(area, avgCov, coats);
+  const worstL = calcLiters(area, p.minCov, coats);
+  const bestL  = calcLiters(area, p.maxCov, coats);
+  const avgBd  = breakdown(avgL, p);
+  const wBd    = breakdown(worstL, p);
+  const bBd    = breakdown(bestL, p);
 
-  worstEl.innerHTML = `<div class="result-label">WORST CASE</div>${renderQty(worstL, worstBd, 'worst')}`;
-  bestEl.innerHTML  = `<div class="result-label">BEST CASE</div>${renderQty(bestL, bestBd, 'best')}`;
+  avgEl.innerHTML   = `<div class="avg-label">AVERAGE</div>${renderAvgQty(avgL, avgBd)}`;
+  worstEl.innerHTML = `<div class="result-label">WORST CASE</div>${renderQty(worstL, wBd, 'worst')}`;
+  bestEl.innerHTML  = `<div class="result-label">BEST CASE</div>${renderQty(bestL, bBd, 'best')}`;
 
-  // Show/hide price inputs based on product sizes
+  // Show/hide price inputs
   const pailWrap   = document.getElementById(`price-pail-wrap-${id}`);
   const gallonWrap = document.getElementById(`price-gallon-wrap-${id}`);
   const canWrap    = document.getElementById(`price-can-wrap-${id}`);
@@ -540,14 +658,15 @@ function updateRow(id) {
 }
 
 function updateCost(id) {
-  const prodEl  = document.getElementById(`prod-${id}`);
-  const areaEl  = document.getElementById(`area-${id}`);
-  const wCostEl = document.getElementById(`worst-cost-${id}`);
-  const bCostEl = document.getElementById(`best-cost-${id}`);
+  const prodEl = document.getElementById(`prod-${id}`);
+  const areaEl = document.getElementById(`area-${id}`);
+  const acEl   = document.getElementById(`avg-cost-${id}`);
+  const wCostEl= document.getElementById(`worst-cost-${id}`);
+  const bCostEl= document.getElementById(`best-cost-${id}`);
 
-  const prodName   = prodEl.value;
-  const area       = parseFloat(areaEl.value);
-  const p          = PRODUCTS[prodName];
+  const prodName = prodEl.value;
+  const area     = parseFloat(areaEl.value);
+  const p        = PRODUCTS[prodName];
   if (!p || !area || area <= 0) return;
 
   const pailPrice   = parseFloat(document.getElementById(`price-pail-${id}`)?.value)   || 0;
@@ -555,40 +674,52 @@ function updateCost(id) {
   const canPrice    = parseFloat(document.getElementById(`price-can-${id}`)?.value)    || 0;
 
   if (!pailPrice && !gallonPrice && !canPrice) {
-    if (wCostEl) wCostEl.innerHTML = `<div class="cost-block-label">WORST — TOTAL COST</div><div class="cost-empty">Enter prices above</div>`;
-    if (bCostEl) bCostEl.innerHTML = `<div class="cost-block-label">BEST — TOTAL COST</div><div class="cost-empty">Enter prices above</div>`;
+    if (acEl)    acEl.innerHTML    = `<div class="avg-cost-label">AVERAGE — TOTAL COST</div><div class="result-empty" style="font-size:12px">Enter prices above</div>`;
+    if (wCostEl) wCostEl.innerHTML = `<div class="cost-block-label">WORST</div><div class="cost-empty">Enter prices</div>`;
+    if (bCostEl) bCostEl.innerHTML = `<div class="cost-block-label">BEST</div><div class="cost-empty">Enter prices</div>`;
     return;
   }
 
-  const coats   = getCoats(p);
-  const worstL  = calcLiters(area, p.minCov, coats);
-  const bestL   = calcLiters(area, p.maxCov, coats);
-  const worstBd = breakdown(worstL, p);
-  const bestBd  = breakdown(bestL, p);
+  const coats  = getCoats(p);
+  const avgCov = (p.minCov + p.maxCov) / 2;
+  const avgL   = calcLiters(area, avgCov, coats);
+  const worstL = calcLiters(area, p.minCov, coats);
+  const bestL  = calcLiters(area, p.maxCov, coats);
+  const avgBd  = breakdown(avgL, p);
+  const wBd    = breakdown(worstL, p);
+  const bBd    = breakdown(bestL, p);
 
-  const worstCost = calcCost(worstBd, pailPrice, gallonPrice, canPrice);
-  const bestCost  = calcCost(bestBd,  pailPrice, gallonPrice, canPrice);
+  const avgCost   = calcCost(avgBd,  pailPrice, gallonPrice, canPrice);
+  const worstCost = calcCost(wBd,    pailPrice, gallonPrice, canPrice);
+  const bestCost  = calcCost(bBd,    pailPrice, gallonPrice, canPrice);
 
-  function costRows(bd, price, label, cls) {
+  function avgCostRows(bd, total) {
     const rows = [];
     if (p.pailSz > 0 && bd.pails > 0)
-      rows.push(`<div class="cost-row"><span class="cost-row-label">${bd.pails} pail${bd.pails!==1?'s':''} × ${fmt(pailPrice)}</span><span class="cost-row-value">${fmt(bd.pails*pailPrice)}</span></div>`);
+      rows.push(`<div class="avg-cost-row"><span class="avg-cost-row-label">${bd.pails} pail${bd.pails!==1?'s':''} × ${fmt(pailPrice)}</span><span class="avg-cost-row-value">${fmt(bd.pails*pailPrice)}</span></div>`);
     if (p.gallonSz > 0 && bd.gallons > 0)
-      rows.push(`<div class="cost-row"><span class="cost-row-label">${bd.gallons} gallon${bd.gallons!==1?'s':''} × ${fmt(gallonPrice)}</span><span class="cost-row-value">${fmt(bd.gallons*gallonPrice)}</span></div>`);
+      rows.push(`<div class="avg-cost-row"><span class="avg-cost-row-label">${bd.gallons} gallon${bd.gallons!==1?'s':''} × ${fmt(gallonPrice)}</span><span class="avg-cost-row-value">${fmt(bd.gallons*gallonPrice)}</span></div>`);
     if (p.canSz > 0 && bd.cans > 0)
-      rows.push(`<div class="cost-row"><span class="cost-row-label">${bd.cans} can${bd.cans!==1?'s':''} × ${fmt(canPrice)}</span><span class="cost-row-value">${fmt(bd.cans*canPrice)}</span></div>`);
-    const perM2 = area > 0 ? price / area : 0;
-    return `<div class="cost-block-label">${label}</div>
-      ${rows.join('')}
-      <div class="cost-total-row">
-        <span class="cost-total-label">TOTAL</span>
-        <span class="cost-total-value">${fmt(price)}</span>
+      rows.push(`<div class="avg-cost-row"><span class="avg-cost-row-label">${bd.cans} can${bd.cans!==1?'s':''} × ${fmt(canPrice)}</span><span class="avg-cost-row-value">${fmt(bd.cans*canPrice)}</span></div>`);
+    return `<div class="avg-cost-label">AVERAGE — TOTAL COST</div>
+      <div class="avg-cost-rows">${rows.join('')}</div>
+      <div class="avg-cost-total-row">
+        <span class="avg-cost-total-label">TOTAL</span>
+        <span class="avg-cost-total-value">${fmt(total)}</span>
       </div>
-      <div class="cost-per-m2">${fmt(perM2)} / m²</div>`;
+      <div class="avg-cost-per-m2">${fmt(total/area)} / m²</div>`;
   }
 
-  if (wCostEl) wCostEl.innerHTML = costRows(worstBd, worstCost, 'WORST — TOTAL COST', 'worst');
-  if (bCostEl) bCostEl.innerHTML = costRows(bestBd,  bestCost,  'BEST — TOTAL COST',  'best');
+  function smallCostBlock(bd, total, label) {
+    const perM2 = fmt(total / area);
+    return `<div class="cost-block-label">${label}</div>
+      <div class="cost-total-row"><span class="cost-total-label">TOTAL</span><span class="cost-total-value">${fmt(total)}</span></div>
+      <div class="cost-per-m2">${perM2} / m²</div>`;
+  }
+
+  if (acEl)    acEl.innerHTML    = avgCostRows(avgBd, avgCost);
+  if (wCostEl) wCostEl.innerHTML = smallCostBlock(wBd, worstCost, 'WORST');
+  if (bCostEl) bCostEl.innerHTML = smallCostBlock(bBd, bestCost,  'BEST');
 }
 
 function updateProductDropdown(id) {
@@ -641,14 +772,18 @@ function addRow() {
                oninput="updateRow(${id})">
       </div>
     </div>
+    <div class="result-avg" id="avg-${id}">
+      <div class="avg-label">AVERAGE</div>
+      <div class="result-empty">Enter product and area</div>
+    </div>
     <div class="row-results">
       <div class="result-block worst" id="worst-${id}">
         <div class="result-label">WORST CASE</div>
-        <div class="result-empty">Enter product and area</div>
+        <div class="result-empty">—</div>
       </div>
       <div class="result-block best" id="best-${id}">
         <div class="result-label">BEST CASE</div>
-        <div class="result-empty">Enter product and area</div>
+        <div class="result-empty">—</div>
       </div>
     </div>
     <div class="price-section">
@@ -671,13 +806,17 @@ function addRow() {
         </div>
       </div>
     </div>
+    <div class="avg-cost-block" id="avg-cost-${id}">
+      <div class="avg-cost-label">AVERAGE — TOTAL COST</div>
+      <div class="result-empty" style="font-size:12px">Enter prices above</div>
+    </div>
     <div class="cost-results">
       <div class="cost-block worst-cost" id="worst-cost-${id}">
-        <div class="cost-block-label">WORST — TOTAL COST</div>
+        <div class="cost-block-label">WORST</div>
         <div class="cost-empty">—</div>
       </div>
       <div class="cost-block best-cost" id="best-cost-${id}">
-        <div class="cost-block-label">BEST — TOTAL COST</div>
+        <div class="cost-block-label">BEST</div>
         <div class="cost-empty">—</div>
       </div>
     </div>`;
