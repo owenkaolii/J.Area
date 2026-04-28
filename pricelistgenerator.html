@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Jotun Pricelist</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #C0392B;
+  --bg: #F5F3EE;
+  --surface: #FFFFFF;
+  --border: #D8D3C8;
+  --text: #1A1814;
+  --muted: #7A756C;
+  --input-bg: #FAFAF7;
+  --accent: #1A4D8F;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'IBM Plex Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+header {
+  background: var(--red); padding: 18px 20px 14px;
+  display: flex; align-items: flex-end; gap: 12px;
+}
+.logo { width: 34px; height: 34px; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo span { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--red); font-size: 13px; letter-spacing: -1px; }
+.header-text h1 { font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #fff; }
+.header-text p { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+main { max-width: 600px; margin: 0 auto; padding: 16px 16px 60px; }
+
+/* ── Section label ── */
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; font-weight: 600;
+  color: var(--muted); text-transform: uppercase;
+  letter-spacing: 1.2px; margin-bottom: 8px;
+}
+
+/* ── Color card ── */
+.color-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+.color-card-header {
+  background: var(--text);
+  padding: 10px 14px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.color-card-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: rgba(255,255,255,0.5);
+}
+.color-card-del {
+  background: none; border: none; color: rgba(255,255,255,0.4);
+  font-size: 18px; cursor: pointer; line-height: 1; padding: 0 4px;
+}
+.color-card-del:hover { color: #fff; }
+
+.color-card-body { padding: 14px; }
+
+/* ── Field ── */
+.field { margin-bottom: 12px; }
+.field label {
+  display: block; font-size: 10px; font-weight: 600;
+  color: var(--muted); text-transform: uppercase;
+  letter-spacing: 0.8px; margin-bottom: 5px;
+}
+.field input, .field select {
+  width: 100%; background: var(--input-bg);
+  border: 1px solid var(--border); color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif; font-size: 14px;
+  padding: 9px 12px; outline: none;
+  transition: border-color 0.15s; border-radius: 0;
+  appearance: none; -webkit-appearance: none;
+}
+.field input:focus, .field select:focus { border-color: var(--red); }
+.field input::placeholder { color: var(--border); }
+.field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237A756C'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px;
+}
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* ── Product toggles ── */
+.product-toggles { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.prod-toggle {
+  padding: 6px 10px; font-size: 11px; font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--muted); cursor: pointer; transition: all 0.12s;
+  user-select: none;
+}
+.prod-toggle.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ── Price inputs per product ── */
+.prod-prices {
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.prod-prices-header {
+  background: var(--input-bg);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.prod-prices-name {
+  font-size: 12px; font-weight: 600;
+}
+.prod-prices-tagline {
+  font-size: 10px; color: var(--muted); font-style: italic;
+}
+.prod-prices-body { padding: 10px 12px; }
+.pack-row {
+  display: grid; grid-template-columns: 60px 1fr;
+  gap: 8px; align-items: center; margin-bottom: 8px;
+}
+.pack-row:last-child { margin-bottom: 0; }
+.pack-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; font-weight: 600; color: var(--muted);
+}
+.pack-input {
+  background: var(--input-bg); border: 1px solid var(--border);
+  color: var(--text); font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px; font-weight: 600;
+  padding: 7px 10px; outline: none; width: 100%;
+  transition: border-color 0.15s; border-radius: 0;
+}
+.pack-input:focus { border-color: var(--red); }
+.pack-input::placeholder { color: var(--border); font-weight: 400; }
+
+/* ── Discount ── */
+.disc-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--input-bg);
+}
+.disc-label {
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.6px;
+  flex-shrink: 0;
+}
+.disc-input {
+  width: 70px; background: var(--surface);
+  border: 1px solid var(--border); color: var(--text);
+  font-family: 'IBM Plex Mono', monospace; font-size: 14px;
+  font-weight: 600; padding: 7px 10px; outline: none;
+  text-align: center; border-radius: 0;
+  -moz-appearance: textfield;
+}
+.disc-input::-webkit-outer-spin-button,
+.disc-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.disc-input:focus { border-color: var(--red); }
+.disc-unit { font-size: 13px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
+.disc-note { font-size: 10px; color: var(--muted); margin-left: auto; font-style: italic; }
+
+/* ── Copy block ── */
+.copy-block {
+  border-top: 1px solid var(--border);
+  padding: 12px 14px;
+}
+.copy-preview {
+  background: var(--input-bg); border: 1px solid var(--border);
+  padding: 12px; font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; line-height: 1.7; color: var(--text);
+  white-space: pre-wrap; margin-bottom: 10px;
+  min-height: 60px;
+}
+.copy-btn {
+  width: 100%; padding: 11px;
+  background: var(--red); border: none; color: #fff;
+  font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; letter-spacing: 0.3px; transition: background 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.copy-btn:hover { background: #A93226; }
+.copy-btn.copied { background: #1A7A3A; }
+
+/* ── Add color button ── */
+.add-color-btn {
+  width: 100%; padding: 13px;
+  background: none; border: 1px dashed var(--border);
+  color: var(--muted); font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+  cursor: pointer; text-transform: uppercase; transition: all 0.15s;
+}
+.add-color-btn:hover { border-color: var(--red); color: var(--red); background: #FEF9F9; }
+
+/* ── Category tabs ── */
+.cat-tabs { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid var(--border); overflow: hidden; }
+.cat-tab {
+  flex: 1; padding: 9px 6px; text-align: center;
+  font-size: 11px; font-weight: 600; font-family: 'IBM Plex Mono', monospace;
+  color: var(--muted); cursor: pointer; background: var(--surface);
+  border-right: 1px solid var(--border); transition: all 0.12s;
+  user-select: none;
+}
+.cat-tab:last-child { border-right: none; }
+.cat-tab.active { background: var(--text); color: #fff; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span>JT</span></div>
+  <div class="header-text">
+    <h1>PRICELIST GENERATOR</h1>
+    <p>Jotun Paint · WhatsApp Format</p>
+  </div>
+</header>
+
+<main>
+  <div id="colors-container"></div>
+  <button class="add-color-btn" onclick="addColor()">+ Add Color</button>
+</main>
+
+<script>
+const PRODUCTS = {
+  "Exterior": [
+    { name: "JOTASHIELD INFINITY",    tagline: "Ketahanan 15 Tahun",                  packs: ["20L","2.5L"] },
+    { name: "JOTASHIELD ULTRA CLEAN", tagline: "Ketahanan 8 Tahun (Self-Cleaning)",   packs: ["20L","2.5L"] },
+    { name: "JOTASHIELD ANTIFADE",    tagline: "Ketahanan 8 Tahun",                   packs: ["20L","2.5L"] },
+    { name: "JOTASHIELD FLEX",        tagline: "Ketahanan 6 Tahun Anti Retak",        packs: ["20L","2.5L"] },
+    { name: "TOUGH SHIELD MAX",       tagline: "Ketahanan 4 Tahun",                   packs: ["18L","3.5L"] },
+    { name: "TOUGH SHIELD MATT",      tagline: "Ketahanan 3 Tahun",                   packs: ["18L","3.5L"] },
+    { name: "WATERGUARD",             tagline: "Cat Waterproofing",                   packs: ["15L","3.5L","0.9L"] },
+    { name: "JOTAROOF",               tagline: "Cat untuk Atap",                      packs: ["20L","2.5L"] },
+  ],
+  "Interior": [
+    { name: "MAJESTIC PURE COLOR",    tagline: "Tampilan Super Matt",                 packs: ["20L","2.5L"] },
+    { name: "MAJESTIC SENSE",         tagline: "Tampilan Kilat (Clean Air Technology)",packs: ["20L","2.5L"] },
+    { name: "MAJESTIC TB SHEEN",      tagline: "Tampilan Kilat",                      packs: ["20L","2.5L"] },
+    { name: "MAJESTIC TB MATT",       tagline: "Tampilan Doff",                       packs: ["20L","2.5L"] },
+    { name: "ESSENCE COVER PLUS",     tagline: "Tampilan Kilat",                      packs: ["18L","3.5L"] },
+    { name: "ESSENCE EASY WIPE",      tagline: "Tampilan Doff",                       packs: ["18L","3.5L"] },
+    { name: "JOTAPLAST",              tagline: "Tampilan Doff",                       packs: ["18L","3.5L"] },
+  ],
+  "Primer": [
+    { name: "CITO PRIMER",          tagline: "", packs: ["20L","2.5L"] },
+    { name: "ULTRA PRIMER",         tagline: "", packs: ["20L","2.5L"] },
+    { name: "JOTASHIELD PRIMER",    tagline: "", packs: ["20L","2.5L"] },
+    { name: "MAJESTIC PRIMER",      tagline: "", packs: ["20L","2.5L"] },
+    { name: "TOUGH SHIELD PRIMER",  tagline: "", packs: ["18L","3.5L"] },
+    { name: "ESSENCE EASY PRIMER",  tagline: "", packs: ["18L","3.5L"] },
+    { name: "JOTAPLAST PRIMER",     tagline: "", packs: ["18L","3.5L"] },
+    { name: "GARDEX PRIMER",        tagline: "", packs: ["5L","1L"] },
+  ],
+  "W&M": [
+    { name: "GARDEX PREMIUM GLOSS",    tagline: "Cat Kayu & Besi Water Based",   packs: ["5L","0.9L"] },
+    { name: "MAJESTIC SUPREME FINISH", tagline: "Cat Kayu & Besi Solvent Based", packs: ["5L","0.9L"] },
+  ],
+  "W&M Primer": [
+    { name: "MAJESTIC PRIMER W&M", tagline: "", packs: ["5L","0.9L"] },
+  ],
+};
+
+const CATEGORIES = Object.keys(PRODUCTS);
+let colorCount = 0;
+
+function fmtPrice(raw, disc) {
+  const n = parseFloat(raw);
+  if (!raw || isNaN(n)) return null;
+  const discounted = disc > 0 ? n * (1 - disc / 100) : n;
+  return Math.round(discounted).toLocaleString('id-ID');
+}
+
+function addColor() {
+  colorCount++;
+  const id = colorCount;
+  const container = document.getElementById('colors-container');
+  const card = document.createElement('div');
+  card.className = 'color-card';
+  card.id = `color-${id}`;
+
+  const catTabs = CATEGORIES.map((c, i) =>
+    `<div class="cat-tab ${i===0?'active':''}" onclick="selectCat(${id},'${c}',this)">${c}</div>`
+  ).join('');
+
+  card.innerHTML = `
+    <div class="color-card-header">
+      <span class="color-card-num">COLOR #${id}</span>
+      <button class="color-card-del" onclick="deleteColor(${id})">×</button>
+    </div>
+    <div class="color-card-body">
+      <div class="field-row">
+        <div class="field">
+          <label>Color Name</label>
+          <input id="cname-${id}" placeholder="e.g. Light Antique" oninput="updatePreview(${id})">
+        </div>
+        <div class="field">
+          <label>Color Code</label>
+          <input id="ccode-${id}" placeholder="e.g. 0471" oninput="updatePreview(${id})">
+        </div>
+      </div>
+
+      <div class="section-label">Category</div>
+      <div class="cat-tabs" id="cat-tabs-${id}">${catTabs}</div>
+
+      <div class="section-label">Products to Include</div>
+      <div class="product-toggles" id="prod-toggles-${id}"></div>
+
+      <div id="prod-prices-${id}"></div>
+    </div>
+
+    <div class="disc-row">
+      <span class="disc-label">Discount</span>
+      <input type="number" class="disc-input" id="disc-${id}" placeholder="0" min="0" max="99" step="0.5"
+             oninput="updatePreview(${id})">
+      <span class="disc-unit">%</span>
+      <span class="disc-note">Applied to all prices on copy</span>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-preview" id="preview-${id}">—</div>
+      <button class="copy-btn" id="copy-btn-${id}" onclick="copyColor(${id})">
+        <span>📋</span> Copy to WhatsApp
+      </button>
+    </div>`;
+
+  container.appendChild(card);
+  // Init with first category
+  renderToggles(id, CATEGORIES[0]);
+  card.querySelector(`#cname-${id}`).focus();
+}
+
+function selectCat(id, cat, el) {
+  const tabs = document.querySelectorAll(`#cat-tabs-${id} .cat-tab`);
+  tabs.forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderToggles(id, cat);
+}
+
+function getCurrentCat(id) {
+  const active = document.querySelector(`#cat-tabs-${id} .cat-tab.active`);
+  return active ? active.textContent.trim() : CATEGORIES[0];
+}
+
+function renderToggles(id, cat) {
+  const prods = PRODUCTS[cat] || [];
+  const toggleContainer = document.getElementById(`prod-toggles-${id}`);
+  const pricesContainer = document.getElementById(`prod-prices-${id}`);
+
+  // Build toggles — default first 2 on
+  toggleContainer.innerHTML = prods.map((p, i) =>
+    `<div class="prod-toggle ${i < 2 ? 'on' : ''}" data-prod="${i}"
+          onclick="toggleProd(${id},${i},this)">${p.name}</div>`
+  ).join('');
+
+  renderPriceInputs(id, cat);
+  updatePreview(id);
+}
+
+function toggleProd(id, idx, el) {
+  el.classList.toggle('on');
+  renderPriceInputs(id, getCurrentCat(id));
+  updatePreview(id);
+}
+
+function renderPriceInputs(id, cat) {
+  const prods = PRODUCTS[cat] || [];
+  const container = document.getElementById(`prod-prices-${id}`);
+  const toggles = document.querySelectorAll(`#prod-toggles-${id} .prod-toggle`);
+
+  // Save existing values before re-render
+  const saved = {};
+  prods.forEach((p, i) => {
+    p.packs.forEach(pack => {
+      const inp = document.getElementById(`price-${id}-${i}-${sanitize(pack)}`);
+      if (inp) saved[`${i}-${pack}`] = inp.value;
+    });
+  });
+
+  let html = '';
+  toggles.forEach((toggle, i) => {
+    if (!toggle.classList.contains('on')) return;
+    const p = prods[i];
+    const packInputs = p.packs.map(pack => `
+      <div class="pack-row">
+        <span class="pack-label">${pack}</span>
+        <input type="number" class="pack-input" id="price-${id}-${i}-${sanitize(pack)}"
+               placeholder="0" min="0"
+               value="${saved[`${i}-${pack}`] || ''}"
+               oninput="updatePreview(${id})">
+      </div>`).join('');
+    html += `<div class="prod-prices">
+      <div class="prod-prices-header">
+        <span class="prod-prices-name">${p.name}</span>
+        ${p.tagline ? `<span class="prod-prices-tagline">${p.tagline}</span>` : ''}
+      </div>
+      <div class="prod-prices-body">${packInputs}</div>
+    </div>`;
+  });
+
+  container.innerHTML = html || `<div style="font-size:12px;color:var(--muted);padding:8px 0">Select at least one product above.</div>`;
+}
+
+function sanitize(str) { return str.replace(/[^a-zA-Z0-9]/g, '_'); }
+
+function buildPreviewText(id) {
+  const cat     = getCurrentCat(id);
+  const prods   = PRODUCTS[cat] || [];
+  const cname   = document.getElementById(`cname-${id}`)?.value.trim() || '';
+  const ccode   = document.getElementById(`ccode-${id}`)?.value.trim() || '';
+  const disc    = parseFloat(document.getElementById(`disc-${id}`)?.value) || 0;
+  const toggles = document.querySelectorAll(`#prod-toggles-${id} .prod-toggle`);
+
+  const colorLine = [cname, ccode].filter(Boolean).join(' ');
+  let lines = [];
+  if (colorLine) lines.push(colorLine);
+  lines.push(cat);
+  lines.push('');
+
+  let hasAnyPrice = false;
+  toggles.forEach((toggle, i) => {
+    if (!toggle.classList.contains('on')) return;
+    const p = prods[i];
+    const packLines = [];
+    p.packs.forEach(pack => {
+      const inp = document.getElementById(`price-${id}-${i}-${sanitize(pack)}`);
+      const raw = inp?.value || '';
+      const formatted = fmtPrice(raw, disc);
+      if (formatted) {
+        packLines.push(`${pack}  ${formatted}`);
+        hasAnyPrice = true;
+      }
+    });
+    if (packLines.length) {
+      lines.push(`${p.name}`);
+      if (p.tagline) lines.push(`${p.tagline}`);
+      packLines.forEach(l => lines.push(l));
+      lines.push('');
+    }
+  });
+
+  if (!hasAnyPrice && lines.filter(l => l).length <= 2) return null;
+  // Remove trailing empty line
+  while (lines.length && lines[lines.length-1] === '') lines.pop();
+  return lines.join('\n');
+}
+
+function updatePreview(id) {
+  const preview = document.getElementById(`preview-${id}`);
+  const text = buildPreviewText(id);
+  preview.textContent = text || '—';
+}
+
+function copyColor(id) {
+  const text = buildPreviewText(id);
+  if (!text || text === '—') return;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(`copy-btn-${id}`);
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = '<span>📋</span> Copy to WhatsApp';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(() => {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const btn = document.getElementById(`copy-btn-${id}`);
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = '<span>📋</span> Copy to WhatsApp';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+function deleteColor(id) {
+  const card = document.getElementById(`color-${id}`);
+  if (card) card.remove();
+}
+
+// Start with one color
+addColor();
+</script>
+</body>
+</html>
