@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Jotun Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F5F3EE;
+  --surface: #FFFFFF;
+  --border: #E2DDD4;
+  --border2: #C8C3B8;
+  --text: #1A1814;
+  --muted: #7A756C;
+  --dim: #B0AAA0;
+  --input-bg: #FAFAF7;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── LOCK SCREEN ── */
+#lock-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+}
+
+.lock-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.lock-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.lock-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 28px;
+  letter-spacing: 0.3px;
+}
+
+.lock-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.lock-input-wrap {
+  position: relative;
+  margin-bottom: 10px;
+}
+.lock-input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 0.5px solid var(--border2);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 11px 44px 11px 14px;
+  outline: none;
+  border-radius: 10px;
+  transition: border-color 0.15s;
+  letter-spacing: 3px;
+}
+.lock-input:focus { border-color: var(--text); }
+.lock-input.error { border-color: #C0392B; }
+.lock-input::placeholder { letter-spacing: 0; color: var(--dim); font-weight: 400; }
+
+.toggle-vis {
+  position: absolute;
+  right: 12px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none;
+  color: var(--dim); cursor: pointer;
+  font-size: 13px; padding: 4px;
+  font-family: 'DM Sans', sans-serif;
+}
+.toggle-vis:hover { color: var(--muted); }
+
+.lock-error {
+  font-size: 11px;
+  color: #C0392B;
+  margin-bottom: 14px;
+  min-height: 16px;
+  transition: opacity 0.2s;
+}
+.lock-error.hidden { opacity: 0; }
+
+.lock-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--text);
+  border: none;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.15s;
+  letter-spacing: 0.3px;
+}
+.lock-btn:hover { background: #333; }
+.lock-btn:active { transform: scale(0.98); }
+
+.lock-footer {
+  margin-top: 20px;
+  font-size: 11px;
+  color: var(--dim);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ── TOOLS SCREEN ── */
+#tools-screen {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+}
+
+header {
+  background: var(--text);
+  padding: 18px 20px 16px;
+}
+.header-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 600; color: #fff;
+  margin-bottom: 3px;
+}
+.header-sub {
+  font-size: 12px; color: rgba(255,255,255,0.45);
+  letter-spacing: 0.3px;
+}
+
+.tools-body {
+  flex: 1;
+  padding: 24px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.tools-greeting {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.tool-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 12px;
+  text-decoration: none;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  cursor: pointer;
+}
+.tool-card:hover {
+  border-color: var(--border2);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.tool-card:active { transform: scale(0.99); }
+
+.tool-icon {
+  width: 46px; height: 46px;
+  background: var(--text);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.tool-info { flex: 1; }
+.tool-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px; font-weight: 600;
+  margin-bottom: 3px;
+}
+.tool-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.tool-arrow {
+  color: var(--dim);
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.tools-divider {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  margin-top: 4px;
+}
+
+.lock-out-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  background: none;
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+.lock-out-btn:hover { border-color: var(--border2); color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lock-screen">
+  <div class="lock-card">
+    <div class="lock-brand">Jotun Tools</div>
+    <div class="lock-sub">Jotun Decorative · Internal Use</div>
+
+    <div class="lock-label">Password</div>
+    <div class="lock-input-wrap">
+      <input type="password" class="lock-input" id="pw-input"
+             placeholder="Enter password"
+             onkeydown="if(event.key==='Enter') unlock()">
+      <button class="toggle-vis" onclick="toggleVis()" id="vis-btn">Show</button>
+    </div>
+    <div class="lock-error hidden" id="lock-error">Incorrect password. Try again.</div>
+    <button class="lock-btn" onclick="unlock()">Enter</button>
+
+    <div class="lock-footer">For internal use only.</div>
+  </div>
+</div>
+
+<!-- TOOLS SCREEN -->
+<div id="tools-screen">
+  <header>
+    <div class="header-title">Jotun Tools</div>
+    <div class="header-sub">Jotun Decorative · Internal Use</div>
+  </header>
+
+  <div class="tools-body">
+    <div class="tools-greeting">Select a tool to get started.</div>
+
+    <div class="tools-divider">Sales Tools</div>
+
+    <a class="tool-card" href="areacalculator.html">
+      <div class="tool-icon">📐</div>
+      <div class="tool-info">
+        <div class="tool-name">Area Calculator</div>
+        <div class="tool-desc">Calculate paint quantity from room area — pails, gallons, cans with best/worst/average breakdown and cost estimate.</div>
+      </div>
+      <div class="tool-arrow">›</div>
+    </a>
+
+    <a class="tool-card" href="pricelistgenerator.html">
+      <div class="tool-icon">💬</div>
+      <div class="tool-info">
+        <div class="tool-name">Pricelist Generator</div>
+        <div class="tool-desc">Build a formatted price list per color and copy it directly to WhatsApp.</div>
+      </div>
+      <div class="tool-arrow">›</div>
+    </a>
+
+    <button class="lock-out-btn" onclick="lockOut()">🔒 Lock</button>
+  </div>
+</div>
+
+<script>
+const PASSWORD = '123';
+
+function unlock() {
+  const input = document.getElementById('pw-input');
+  const error = document.getElementById('lock-error');
+
+  if (input.value === PASSWORD) {
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('tools-screen').style.display = 'flex';
+    error.classList.add('hidden');
+    input.value = '';
+  } else {
+    input.classList.add('error');
+    error.classList.remove('hidden');
+    input.value = '';
+    input.focus();
+    setTimeout(() => input.classList.remove('error'), 1000);
+  }
+}
+
+function lockOut() {
+  document.getElementById('tools-screen').style.display = 'none';
+  document.getElementById('lock-screen').style.display = 'flex';
+}
+
+function toggleVis() {
+  const input = document.getElementById('pw-input');
+  const btn   = document.getElementById('vis-btn');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = 'Hide';
+  } else {
+    input.type = 'password';
+    btn.textContent = 'Show';
+  }
+}
+</script>
+</body>
+</html>
