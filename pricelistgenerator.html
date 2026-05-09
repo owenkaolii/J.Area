@@ -4,215 +4,232 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Jotun Pricelist</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --red: #C0392B;
   --bg: #F5F3EE;
   --surface: #FFFFFF;
-  --border: #D8D3C8;
+  --border: #E2DDD4;
+  --border2: #C8C3B8;
   --text: #1A1814;
   --muted: #7A756C;
+  --dim: #B0AAA0;
   --input-bg: #FAFAF7;
-  --accent: #1A4D8F;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: 'IBM Plex Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
 header {
-  background: var(--red); padding: 18px 20px 14px;
-  display: flex; align-items: flex-end; gap: 12px;
+  background: var(--text);
+  padding: 18px 20px 16px;
 }
-.logo { width: 34px; height: 34px; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.logo span { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--red); font-size: 13px; letter-spacing: -1px; }
-.header-text h1 { font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #fff; }
-.header-text p { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+.header-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 600; color: #fff;
+  margin-bottom: 3px;
+}
+.header-sub {
+  font-size: 12px; color: rgba(255,255,255,0.45);
+  letter-spacing: 0.3px;
+}
 
 main { max-width: 600px; margin: 0 auto; padding: 16px 16px 60px; }
 
-/* ── Section label ── */
 .section-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px; font-weight: 600;
+  font-size: 10px; font-weight: 500;
   color: var(--muted); text-transform: uppercase;
-  letter-spacing: 1.2px; margin-bottom: 8px;
+  letter-spacing: 1px; margin-bottom: 8px;
 }
 
 /* ── Color card ── */
 .color-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
   margin-bottom: 14px;
 }
 .color-card-header {
-  background: var(--text);
-  padding: 10px 14px;
+  padding: 12px 16px;
+  border-bottom: 0.5px solid var(--border);
   display: flex; justify-content: space-between; align-items: center;
 }
 .color-card-num {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px; color: rgba(255,255,255,0.5);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px; font-weight: 500;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px;
 }
 .color-card-del {
-  background: none; border: none; color: rgba(255,255,255,0.4);
+  background: none; border: none; color: var(--dim);
   font-size: 18px; cursor: pointer; line-height: 1; padding: 0 4px;
+  transition: color 0.15s;
 }
-.color-card-del:hover { color: #fff; }
+.color-card-del:hover { color: #C0392B; }
 
-.color-card-body { padding: 14px; }
+.color-card-body { padding: 14px 16px; }
 
-/* ── Field ── */
+/* ── Fields ── */
 .field { margin-bottom: 12px; }
 .field label {
-  display: block; font-size: 10px; font-weight: 600;
+  display: block; font-size: 10px; font-weight: 500;
   color: var(--muted); text-transform: uppercase;
-  letter-spacing: 0.8px; margin-bottom: 5px;
+  letter-spacing: 0.7px; margin-bottom: 5px;
 }
 .field input, .field select {
   width: 100%; background: var(--input-bg);
-  border: 1px solid var(--border); color: var(--text);
-  font-family: 'IBM Plex Sans', sans-serif; font-size: 14px;
+  border: 0.5px solid var(--border2); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 14px;
   padding: 9px 12px; outline: none;
-  transition: border-color 0.15s; border-radius: 0;
+  transition: border-color 0.15s; border-radius: 8px;
   appearance: none; -webkit-appearance: none;
 }
-.field input:focus, .field select:focus { border-color: var(--red); }
-.field input::placeholder { color: var(--border); }
+.field input:focus, .field select:focus { border-color: var(--text); }
+.field input::placeholder { color: var(--dim); }
 .field select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237A756C'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px;
 }
-
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-/* ── Product toggles ── */
-.product-toggles { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-.prod-toggle {
-  padding: 6px 10px; font-size: 11px; font-weight: 600;
-  font-family: 'IBM Plex Mono', monospace;
-  background: var(--bg); border: 1px solid var(--border);
-  color: var(--muted); cursor: pointer; transition: all 0.12s;
-  user-select: none;
+/* ── Category tabs ── */
+.cat-tabs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+.cat-tab {
+  padding: 6px 12px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--muted); cursor: pointer;
+  border: 0.5px solid var(--border2);
+  background: var(--input-bg);
+  transition: all 0.12s; user-select: none;
 }
-.prod-toggle.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.cat-tab.active { background: var(--text); border-color: var(--text); color: #fff; }
 
-/* ── Price inputs per product ── */
+/* ── Product toggles ── */
+.product-toggles { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+.prod-toggle {
+  padding: 5px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--input-bg);
+  border: 0.5px solid var(--border2);
+  color: var(--muted); cursor: pointer;
+  transition: all 0.12s; user-select: none;
+}
+.prod-toggle.on { background: var(--text); border-color: var(--text); color: #fff; }
+
+/* ── Price inputs ── */
 .prod-prices {
-  border: 1px solid var(--border);
-  margin-bottom: 8px;
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
   overflow: hidden;
+  margin-bottom: 8px;
 }
 .prod-prices-header {
   background: var(--input-bg);
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border);
+  padding: 9px 12px;
+  border-bottom: 0.5px solid var(--border);
   display: flex; justify-content: space-between; align-items: center;
 }
 .prod-prices-name {
-  font-size: 12px; font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px; font-weight: 600; color: var(--text);
 }
 .prod-prices-tagline {
   font-size: 10px; color: var(--muted); font-style: italic;
 }
 .prod-prices-body { padding: 10px 12px; }
 .pack-row {
-  display: grid; grid-template-columns: 60px 1fr;
+  display: grid; grid-template-columns: 56px 1fr;
   gap: 8px; align-items: center; margin-bottom: 8px;
 }
 .pack-row:last-child { margin-bottom: 0; }
 .pack-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px; font-weight: 600; color: var(--muted);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px; font-weight: 500; color: var(--muted);
 }
 .pack-input {
-  background: var(--input-bg); border: 1px solid var(--border);
-  color: var(--text); font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px; font-weight: 600;
+  background: var(--input-bg);
+  border: 0.5px solid var(--border2);
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px; font-weight: 500;
   padding: 7px 10px; outline: none; width: 100%;
-  transition: border-color 0.15s; border-radius: 0;
+  transition: border-color 0.15s; border-radius: 7px;
 }
-.pack-input:focus { border-color: var(--red); }
-.pack-input::placeholder { color: var(--border); font-weight: 400; }
+.pack-input:focus { border-color: var(--text); }
+.pack-input::placeholder { color: var(--dim); font-weight: 400; }
 
 /* ── Discount ── */
 .disc-row {
   display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px;
-  border-top: 1px solid var(--border);
+  padding: 10px 16px;
+  border-top: 0.5px solid var(--border);
   background: var(--input-bg);
 }
 .disc-label {
-  font-size: 11px; font-weight: 600; color: var(--muted);
-  text-transform: uppercase; letter-spacing: 0.6px;
-  flex-shrink: 0;
+  font-size: 11px; font-weight: 500; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.6px; flex-shrink: 0;
 }
 .disc-input {
-  width: 70px; background: var(--surface);
-  border: 1px solid var(--border); color: var(--text);
-  font-family: 'IBM Plex Mono', monospace; font-size: 14px;
-  font-weight: 600; padding: 7px 10px; outline: none;
-  text-align: center; border-radius: 0;
+  width: 64px; background: var(--surface);
+  border: 0.5px solid var(--border2); color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px; font-weight: 500;
+  padding: 7px 10px; outline: none;
+  text-align: center; border-radius: 7px;
   -moz-appearance: textfield;
+  transition: border-color 0.15s;
 }
 .disc-input::-webkit-outer-spin-button,
 .disc-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-.disc-input:focus { border-color: var(--red); }
-.disc-unit { font-size: 13px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
-.disc-note { font-size: 10px; color: var(--muted); margin-left: auto; font-style: italic; }
+.disc-input:focus { border-color: var(--text); }
+.disc-unit { font-size: 13px; color: var(--muted); font-family: 'Space Grotesk', sans-serif; }
+.disc-note { font-size: 10px; color: var(--dim); margin-left: auto; font-style: italic; }
 
 /* ── Copy block ── */
-.copy-block {
-  border-top: 1px solid var(--border);
-  padding: 12px 14px;
-}
+.copy-block { padding: 12px 16px; }
 .copy-preview {
-  background: var(--input-bg); border: 1px solid var(--border);
-  padding: 12px; font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px; line-height: 1.7; color: var(--text);
-  white-space: pre-wrap; margin-bottom: 10px;
-  min-height: 60px;
+  background: var(--input-bg);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px; line-height: 1.8;
+  color: var(--text); white-space: pre-wrap;
+  margin-bottom: 10px; min-height: 60px;
 }
 .copy-btn {
-  width: 100%; padding: 11px;
-  background: var(--red); border: none; color: #fff;
-  font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; font-weight: 600;
-  cursor: pointer; letter-spacing: 0.3px; transition: background 0.15s;
+  width: 100%; padding: 12px;
+  background: var(--text); border: none; color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; letter-spacing: 0.3px;
+  transition: background 0.15s; border-radius: 8px;
   display: flex; align-items: center; justify-content: center; gap: 6px;
 }
-.copy-btn:hover { background: #A93226; }
+.copy-btn:hover { background: #333; }
 .copy-btn.copied { background: #1A7A3A; }
 
 /* ── Add color button ── */
 .add-color-btn {
   width: 100%; padding: 13px;
-  background: none; border: 1px dashed var(--border);
-  color: var(--muted); font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
-  cursor: pointer; text-transform: uppercase; transition: all 0.15s;
+  background: none;
+  border: 0.5px dashed var(--border2);
+  border-radius: 10px;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.5px; cursor: pointer;
+  text-transform: uppercase; transition: all 0.15s;
 }
-.add-color-btn:hover { border-color: var(--red); color: var(--red); background: #FEF9F9; }
-
-/* ── Category tabs ── */
-.cat-tabs { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid var(--border); overflow: hidden; }
-.cat-tab {
-  flex: 1; padding: 9px 6px; text-align: center;
-  font-size: 11px; font-weight: 600; font-family: 'IBM Plex Mono', monospace;
-  color: var(--muted); cursor: pointer; background: var(--surface);
-  border-right: 1px solid var(--border); transition: all 0.12s;
-  user-select: none;
-}
-.cat-tab:last-child { border-right: none; }
-.cat-tab.active { background: var(--text); color: #fff; }
+.add-color-btn:hover { border-color: var(--text); color: var(--text); }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo"><span>JT</span></div>
-  <div class="header-text">
-    <h1>PRICELIST GENERATOR</h1>
-    <p>Jotun Paint · WhatsApp Format</p>
-  </div>
+  <div class="header-title">Pricelist Generator</div>
+  <div class="header-sub">Jotun Decorative · WhatsApp Format</div>
 </header>
 
 <main>
@@ -235,8 +252,8 @@ const PRODUCTS = {
   "Interior": [
     { name: "Majestic Pure Color",    tagline: "Tampilan Super Matt",                  packs: ["20L","2.5L"] },
     { name: "Majestic Sense",         tagline: "Tampilan Kilat (Clean Air Technology)",packs: ["20L","2.5L"] },
-    { name: "Majestic TB Sheen",      tagline: "Tampilan Kilat",                       packs: ["20L","2.5L"] },
-    { name: "Majestic TB Matt",       tagline: "Tampilan Doff",                        packs: ["20L","2.5L"] },
+    { name: "Majestic True Beauty Sheen", tagline: "Tampilan Kilat",                       packs: ["20L","2.5L"] },
+    { name: "Majestic True Beauty Matt",  tagline: "Tampilan Doff",                        packs: ["20L","2.5L"] },
     { name: "Essence Cover Plus",     tagline: "Tampilan Kilat",                       packs: ["18L","3.5L"] },
     { name: "Essence Easy Wipe",      tagline: "Tampilan Doff",                        packs: ["18L","3.5L"] },
     { name: "Jotaplast",              tagline: "Tampilan Doff",                        packs: ["18L","3.5L"] },
