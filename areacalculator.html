@@ -4,497 +4,334 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jotun Area Calculator</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --red:    #C0392B;
-    --red-dk: #96281B;
-    --bg:     #F5F3EE;
-    --surface:#FFFFFF;
-    --border: #D8D3C8;
-    --text:   #1A1814;
-    --muted:  #7A756C;
-    --worst:  #7B2D00;
+    --bg:      #F5F3EE;
+    --surface: #FFFFFF;
+    --border:  #E2DDD4;
+    --border2: #C8C3B8;
+    --text:    #1A1814;
+    --muted:   #7A756C;
+    --dim:     #B0AAA0;
+    --input-bg:#FAFAF7;
+    --worst:   #7B2D00;
     --worst-bg:#FDF0E8;
     --worst-bd:#E8C4A8;
-    --best:   #1A4D2E;
+    --best:    #1A4D2E;
     --best-bg: #EAF4EC;
     --best-bd: #A8D4B4;
-    --input-bg:#FAFAF7;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
   body {
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
   }
 
-  /* ── Header ── */
   header {
-    background: var(--red);
-    padding: 20px 24px 16px;
-    display: flex;
-    align-items: flex-end;
-    gap: 12px;
+    background: var(--text);
+    padding: 18px 20px 16px;
   }
-  .logo-block {
-    width: 36px; height: 36px;
-    background: #fff;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
+  .header-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px; font-weight: 600; color: #fff;
+    margin-bottom: 3px;
   }
-  .logo-block span {
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    color: var(--red);
-    font-size: 14px;
-    letter-spacing: -1px;
-  }
-  .header-text h1 {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 16px;
-    font-weight: 600;
-    color: #fff;
-    letter-spacing: 0.5px;
-  }
-  .header-text p {
-    font-size: 11px;
-    color: rgba(255,255,255,0.7);
-    margin-top: 2px;
+  .header-sub {
+    font-size: 12px; color: rgba(255,255,255,0.45);
     letter-spacing: 0.3px;
   }
 
-  /* ── Main ── */
   main {
     max-width: 900px;
     margin: 0 auto;
-    padding: 20px 16px 48px;
+    padding: 16px 16px 48px;
   }
 
   /* ── Row card ── */
   .row-card {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
     margin-bottom: 12px;
+    overflow: hidden;
     transition: box-shadow 0.15s;
   }
   .row-card:focus-within {
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   }
 
   .row-top {
     display: grid;
     grid-template-columns: 28px 1fr 1fr 120px;
     gap: 0;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
   }
 
   .row-num {
     background: var(--text);
     color: #fff;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; font-weight: 600;
     display: flex; align-items: center; justify-content: center;
   }
 
   .input-cell {
     padding: 10px 12px;
-    border-right: 1px solid var(--border);
+    border-right: 0.5px solid var(--border);
   }
   .input-cell:last-child { border-right: none; }
 
   .input-cell label {
     display: block;
-    font-size: 10px;
-    font-weight: 600;
+    font-size: 10px; font-weight: 500;
     color: var(--muted);
     text-transform: uppercase;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.7px;
     margin-bottom: 4px;
   }
 
   .input-cell select,
   .input-cell input {
-    width: 100%;
-    border: none;
+    width: 100%; border: none;
     background: transparent;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    outline: none;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--text); outline: none;
+    cursor: pointer; appearance: none; -webkit-appearance: none;
   }
-  .input-cell select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237A756C'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0 center; padding-right: 14px; }
+  .input-cell select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237A756C'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 0 center; padding-right: 14px;
+  }
   .input-cell input[type=number] { cursor: text; }
-  .input-cell input::placeholder { color: var(--border); font-weight: 400; }
+  .input-cell input::placeholder { color: var(--dim); font-weight: 400; }
 
   /* ── Results ── */
-
-  /* Average — primary, full width, prominent */
   .result-avg {
     padding: 16px 16px 12px;
     background: var(--surface);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
   }
   .avg-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: var(--red);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    color: var(--text); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
   }
   .avg-label::after {
     content: 'RECOMMENDED';
-    font-size: 9px;
-    background: var(--red);
-    color: #fff;
-    padding: 1px 6px;
-    letter-spacing: 0.8px;
+    font-size: 9px; background: var(--text);
+    color: #fff; padding: 1px 6px;
+    letter-spacing: 0.8px; border-radius: 3px;
   }
   .avg-liters-tag {
     display: inline-block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 4px 10px;
-    margin-bottom: 12px;
-    background: #F5F3EE;
-    border: 1px solid var(--border);
-    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; font-weight: 500;
+    padding: 4px 10px; margin-bottom: 12px;
+    background: var(--input-bg);
+    border: 0.5px solid var(--border2);
+    color: var(--text); border-radius: 6px;
   }
   .avg-qty-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
   }
-  .avg-qty-item {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
+  .avg-qty-item { display: flex; flex-direction: column; gap: 3px; }
   .avg-qty-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 32px;
-    font-weight: 600;
-    line-height: 1;
-    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px; font-weight: 600; line-height: 1; color: var(--text);
   }
-  .avg-qty-num.zero { color: var(--border); }
+  .avg-qty-num.zero { color: var(--dim); }
   .avg-qty-label {
-    font-size: 10px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 10px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
   }
 
-  /* Worst / Best — secondary, compact, side by side */
   .row-results {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-bottom: 0.5px solid var(--border);
   }
-  .result-block {
-    padding: 10px 12px;
-  }
-  .result-block.worst {
-    background: var(--worst-bg);
-    border-right: 1px solid var(--worst-bd);
-  }
-  .result-block.best {
-    background: var(--best-bg);
-  }
+  .result-block { padding: 10px 12px; }
+  .result-block.worst { background: var(--worst-bg); border-right: 0.5px solid var(--worst-bd); }
+  .result-block.best  { background: var(--best-bg); }
   .result-label {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;
   }
   .worst .result-label { color: var(--worst); }
-  .best  .result-label { color: var(--best);  }
-  .result-empty {
-    font-size: 11px;
-    color: var(--border);
-    font-style: italic;
-  }
-  .qty-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
-  }
+  .best  .result-label { color: var(--best); }
+  .result-empty { font-size: 11px; color: var(--dim); font-style: italic; }
+
+  .qty-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
   .qty-item .qty-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; font-weight: 600; line-height: 1;
   }
   .worst .qty-num { color: var(--worst); }
-  .best  .qty-num { color: var(--best);  }
+  .best  .qty-num { color: var(--best); }
   .qty-item .qty-label {
-    font-size: 9px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 2px;
+    font-size: 9px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px;
   }
   .liters-tag {
     display: inline-block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    padding: 1px 5px;
-    margin-bottom: 6px;
-    border-radius: 2px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; padding: 1px 6px; margin-bottom: 6px; border-radius: 3px;
   }
   .worst .liters-tag { background: var(--worst-bd); color: var(--worst); }
-  .best  .liters-tag { background: var(--best-bd);  color: var(--best);  }
+  .best  .liters-tag { background: var(--best-bd);  color: var(--best); }
 
-  /* ── Add row button ── */
-  .add-row-btn {
-    width: 100%;
-    padding: 12px;
-    background: none;
-    border: 1px dashed var(--border);
-    color: var(--muted);
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.15s;
-    margin-top: 4px;
-  }
-  .add-row-btn:hover {
-    border-color: var(--red);
-    color: var(--red);
-    background: #FEF9F9;
-  }
-
-  /* ── Legend ── */
-  .legend {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    padding: 14px 0 0;
-    border-top: 1px solid var(--border);
-    margin-top: 16px;
-  }
-  .legend-item {
-    font-size: 10px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .legend-dot {
-    width: 8px; height: 8px;
-    border-radius: 1px;
-    flex-shrink: 0;
-  }
-
-  /* ── Responsive ── */
-  @media (max-width: 600px) {
-    .row-top { grid-template-columns: 28px 1fr 1fr; }
-    .row-top .area-cell { grid-column: 1 / -1; border-top: 1px solid var(--border); border-right: none; }
-    .avg-qty-grid { grid-template-columns: repeat(3, 1fr); }
-    .avg-qty-num { font-size: 26px; }
-    .qty-grid { grid-template-columns: repeat(3, 1fr); }
-  }
-  @media (max-width: 400px) {
-    .row-results { grid-template-columns: 1fr; }
-    .result-block.worst { border-right: none; border-bottom: 1px solid var(--worst-bd); }
-    .cost-results { grid-template-columns: 1fr; }
-    .cost-block.worst-cost { border-right: none; border-bottom: 1px solid var(--worst-bd); }
-  }
-
-  /* ── Zero state ── */
-  .zero { color: var(--border) !important; }
-
-  /* ── Price inputs ── */
+  /* ── Price section ── */
   .price-section {
-    border-top: 1px solid var(--border);
+    border-top: 0.5px solid var(--border);
     padding: 12px 14px;
     background: var(--input-bg);
   }
   .price-section-label {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 10px;
+    font-size: 10px; font-weight: 500; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 10px;
   }
-  .price-inputs {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
+  .price-inputs { display: flex; gap: 10px; flex-wrap: wrap; }
   .price-input-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
-    min-width: 90px;
+    display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 90px;
   }
   .price-input-item label {
-    font-size: 10px;
-    color: var(--muted);
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-size: 10px; color: var(--muted); font-weight: 500; letter-spacing: 0.5px;
   }
   .price-input-item input {
-    border: 1px solid var(--border);
+    border: 0.5px solid var(--border2);
     background: var(--surface);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    padding: 7px 10px;
-    outline: none;
-    width: 100%;
-    transition: border-color 0.15s;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; font-weight: 500; color: var(--text);
+    padding: 7px 10px; outline: none; width: 100%;
+    transition: border-color 0.15s; border-radius: 7px;
   }
-  .price-input-item input:focus { border-color: var(--red); }
-  .price-input-item input::placeholder { color: var(--border); font-weight: 400; }
+  .price-input-item input:focus { border-color: var(--text); }
+  .price-input-item input::placeholder { color: var(--dim); font-weight: 400; }
   .price-input-item.hidden { display: none; }
 
   /* ── Average cost ── */
   .avg-cost-block {
     padding: 14px 16px;
     background: var(--surface);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
   }
   .avg-cost-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--red);
-    margin-bottom: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text); margin-bottom: 10px;
   }
   .avg-cost-rows { margin-bottom: 8px; }
   .avg-cost-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 5px;
-    font-size: 12px;
+    display: flex; justify-content: space-between;
+    align-items: baseline; margin-bottom: 5px; font-size: 12px;
   }
   .avg-cost-row-label { color: var(--muted); }
-  .avg-cost-row-value { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--text); }
+  .avg-cost-row-value {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: var(--text);
+  }
   .avg-cost-total-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    border-top: 2px solid var(--text);
-    padding-top: 8px;
-    margin-top: 8px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-top: 1.5px solid var(--text); padding-top: 8px; margin-top: 8px;
   }
   .avg-cost-total-label { font-size: 12px; font-weight: 600; }
   .avg-cost-total-value {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px; font-weight: 600; color: var(--text);
   }
   .avg-cost-per-m2 {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--red);
-    font-weight: 600;
-    text-align: right;
-    margin-top: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px; color: var(--muted); font-weight: 500;
+    text-align: right; margin-top: 4px;
   }
 
-  /* ── Cost results (worst/best) ── */
+  /* ── Cost results worst/best ── */
   .cost-results {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-top: 0.5px solid var(--border);
   }
-  .cost-block {
-    padding: 12px 14px;
-  }
-  .cost-block.worst-cost { background: var(--worst-bg); border-right: 1px solid var(--worst-bd); }
+  .cost-block { padding: 12px 14px; }
+  .cost-block.worst-cost { background: var(--worst-bg); border-right: 0.5px solid var(--worst-bd); }
   .cost-block.best-cost  { background: var(--best-bg); }
   .cost-block-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 10px;
   }
   .worst-cost .cost-block-label { color: var(--worst); }
   .best-cost  .cost-block-label { color: var(--best); }
-  .cost-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 6px;
-  }
-  .cost-row-label {
-    font-size: 11px;
-    color: var(--muted);
-  }
-  .cost-row-value {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  .worst-cost .cost-row-value { color: var(--worst); }
-  .best-cost  .cost-row-value { color: var(--best); }
   .cost-total-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    border-top: 1px solid var(--worst-bd);
-    padding-top: 7px;
-    margin-top: 7px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-top: 0.5px solid var(--worst-bd); padding-top: 7px; margin-top: 7px;
   }
-  .best-cost  .cost-total-row { border-top-color: var(--best-bd); }
+  .best-cost .cost-total-row { border-top-color: var(--best-bd); }
   .cost-total-label { font-size: 11px; font-weight: 600; color: var(--muted); }
   .cost-total-value {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 14px;
-    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600;
   }
   .worst-cost .cost-total-value { color: var(--worst); }
   .best-cost  .cost-total-value { color: var(--best); }
   .cost-per-m2 {
-    font-size: 10px;
-    margin-top: 4px;
-    text-align: right;
-    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; margin-top: 4px; text-align: right;
+    font-family: 'Space Grotesk', sans-serif;
   }
   .worst-cost .cost-per-m2 { color: var(--worst); opacity: 0.7; }
   .best-cost  .cost-per-m2 { color: var(--best);  opacity: 0.7; }
-  .cost-empty { font-size: 11px; color: var(--border); font-style: italic; }
+  .cost-empty { font-size: 11px; color: var(--dim); font-style: italic; }
 
+  /* ── Add row ── */
+  .add-row-btn {
+    width: 100%; padding: 13px;
+    background: none; border: 0.5px dashed var(--border2);
+    border-radius: 10px; color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.5px; cursor: pointer;
+    text-transform: uppercase; transition: all 0.15s; margin-top: 4px;
+  }
+  .add-row-btn:hover { border-color: var(--text); color: var(--text); }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    padding: 14px 0 0; border-top: 0.5px solid var(--border); margin-top: 16px;
+  }
+  .legend-item {
+    font-size: 10px; color: var(--muted);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── Zero ── */
+  .zero { color: var(--dim) !important; }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .row-top { grid-template-columns: 28px 1fr 1fr; }
+    .row-top .area-cell { grid-column: 1 / -1; border-top: 0.5px solid var(--border); border-right: none; }
+    .avg-qty-num { font-size: 26px; }
+  }
   @media (max-width: 400px) {
+    .row-results { grid-template-columns: 1fr; }
+    .result-block.worst { border-right: none; border-bottom: 0.5px solid var(--worst-bd); }
     .cost-results { grid-template-columns: 1fr; }
-    .cost-block.worst-cost { border-right: none; border-bottom: 1px solid var(--worst-bd); }
+    .cost-block.worst-cost { border-right: none; border-bottom: 0.5px solid var(--worst-bd); }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-block"><span>JT</span></div>
-  <div class="header-text">
-    <h1>AREA CALCULATOR</h1>
-    <p>Jotun Paint · Quantity Estimator</p>
-  </div>
+  <div class="header-title">Area Calculator</div>
+  <div class="header-sub">Jotun Decorative · Quantity Estimator</div>
 </header>
 
 <main>
@@ -510,32 +347,32 @@
 
 <script>
 const PRODUCTS = {
-  "JOTASHIELD INFINITY": { category: "Exterior", minCov: 9.5, maxCov: 12.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "JOTASHIELD ULTRA CLEAN": { category: "Exterior", minCov: 9.5, maxCov: 12.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "JOTASHIELD ANTIFADE": { category: "Exterior", minCov: 9.8, maxCov: 13.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "JOTASHIELD FLEX": { category: "Exterior", minCov: 5.0, maxCov: 7.5, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "TOUGH SHIELD MAX": { category: "Exterior", minCov: 9.3, maxCov: 12.3, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
-  "TOUGH SHIELD MATT": { category: "Exterior", minCov: 9.3, maxCov: 12.3, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
-  "WATERGUARD": { category: "Exterior", minCov: 5.5, maxCov: 7.5, pailSz: 15.0, gallonSz: 3.5, canSz: 0.9 },
-  "JOTAROOF": { category: "Exterior", minCov: 9.8, maxCov: 13.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "MAJESTIC PURE COLOR": { category: "Interior", minCov: 10.5, maxCov: 14.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "MAJESTIC SENSE": { category: "Interior", minCov: 5.9, maxCov: 8.2, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "MAJESTIC TRUE BEAUTY SHEEN": { category: "Interior", minCov: 9.0, maxCov: 12.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "MAJESTIC TRUE BEAUTY MATT": { category: "Interior", minCov: 9.0, maxCov: 12.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "ESSENCE COVER PLUS": { category: "Interior", minCov: 8.7, maxCov: 11.6, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
-  "ESSENCE EASY WIPE": { category: "Interior", minCov: 9.3, maxCov: 11.3, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
-  "JOTAPLAST": { category: "Interior", minCov: 9.0, maxCov: 12.0, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
-  "CITO PRIMER": { category: "Primer", minCov: 6.3, maxCov: 8.3, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "ULTRA PRIMER": { category: "Primer", minCov: 8.0, maxCov: 10.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "JOTASHIELD PRIMER": { category: "Primer", minCov: 8.0, maxCov: 10.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "MAJESTIC PRIMER": { category: "Primer", minCov: 8.0, maxCov: 10.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
-  "TOUGH SHIELD PRIMER": { category: "Primer", minCov: 8.8, maxCov: 11.6, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
-  "ESSENCE EASY PRIMER": { category: "Primer", minCov: 8.8, maxCov: 11.6, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
-  "JOTAPLAST PRIMER": { category: "Primer", minCov: 9.0, maxCov: 12.0, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
-  "GARDEX PRIMER": { category: "Primer", minCov: 10.0, maxCov: 17.0, pailSz: 0, gallonSz: 5.0, canSz: 1.0 },
-  "GARDEX PREMIUM GLOSS": { category: "W&M", minCov: 12.0, maxCov: 16.0, pailSz: 0, gallonSz: 5.0, canSz: 0.9 },
-  "MAJESTIC SUPREME FINISH": { category: "W&M", minCov: 9.5, maxCov: 12.7, pailSz: 0, gallonSz: 5.0, canSz: 0.9 },
-  "MAJESTIC PRIMER WOOD & METAL": { category: "W&M Primer", minCov: 7.8, maxCov: 13.0, pailSz: 0, gallonSz: 5.0, canSz: 0.9 }
+  "Jotashield Infinity":        { category: "Exterior", minCov: 9.5,  maxCov: 12.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Jotashield Ultra Clean":     { category: "Exterior", minCov: 9.5,  maxCov: 12.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Jotashield Antifade":        { category: "Exterior", minCov: 9.8,  maxCov: 13.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Jotashield Flex":            { category: "Exterior", minCov: 5.0,  maxCov: 7.5,  pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Tough Shield Max":           { category: "Exterior", minCov: 9.3,  maxCov: 12.3, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "Tough Shield Matt":          { category: "Exterior", minCov: 9.3,  maxCov: 12.3, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "Waterguard":                 { category: "Exterior", minCov: 5.5,  maxCov: 7.5,  pailSz: 15.0, gallonSz: 3.5, canSz: 0.9 },
+  "Jotaroof":                   { category: "Exterior", minCov: 9.8,  maxCov: 13.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Majestic Pure Color":        { category: "Interior", minCov: 10.5, maxCov: 14.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Majestic Sense":             { category: "Interior", minCov: 5.9,  maxCov: 8.2,  pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Majestic True Beauty Sheen": { category: "Interior", minCov: 9.0,  maxCov: 12.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Majestic True Beauty Matt":  { category: "Interior", minCov: 9.0,  maxCov: 12.0, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Essence Cover Plus":         { category: "Interior", minCov: 8.7,  maxCov: 11.6, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "Essence Easy Wipe":          { category: "Interior", minCov: 9.3,  maxCov: 11.3, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "Jotaplast":                  { category: "Interior", minCov: 9.0,  maxCov: 12.0, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "Cito Primer":                { category: "Primer",   minCov: 6.3,  maxCov: 8.3,  pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Ultra Primer":               { category: "Primer",   minCov: 8.0,  maxCov: 10.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Jotashield Primer":          { category: "Primer",   minCov: 8.0,  maxCov: 10.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Majestic Primer":            { category: "Primer",   minCov: 8.0,  maxCov: 10.7, pailSz: 20.0, gallonSz: 2.5, canSz: 0 },
+  "Tough Shield Primer":        { category: "Primer",   minCov: 8.8,  maxCov: 11.6, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "Essence Easy Primer":        { category: "Primer",   minCov: 8.8,  maxCov: 11.6, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "Jotaplast Primer":           { category: "Primer",   minCov: 9.0,  maxCov: 12.0, pailSz: 18.0, gallonSz: 3.5, canSz: 0 },
+  "Gardex Primer":              { category: "Primer",   minCov: 10.0, maxCov: 17.0, pailSz: 0,    gallonSz: 5.0, canSz: 1.0 },
+  "Gardex Premium Gloss":       { category: "W&M",      minCov: 12.0, maxCov: 16.0, pailSz: 0,    gallonSz: 5.0, canSz: 0.9 },
+  "Majestic Supreme Finish":    { category: "W&M",      minCov: 9.5,  maxCov: 12.7, pailSz: 0,    gallonSz: 5.0, canSz: 0.9 },
+  "Majestic Primer W&M":        { category: "W&M Primer", minCov: 7.8, maxCov: 13.0, pailSz: 0,   gallonSz: 5.0, canSz: 0.9 }
 };
 const CATEGORIES = ["Exterior", "Interior", "Primer", "W&M", "W&M Primer"];
 
