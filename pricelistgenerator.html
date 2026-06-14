@@ -223,12 +223,16 @@ main { max-width: 600px; margin: 0 auto; padding: 16px 16px 60px; }
   text-transform: uppercase; transition: all 0.15s;
 }
 .add-color-btn:hover { border-color: var(--text); color: var(--text); }
+
+.home-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px 6px 10px;margin-bottom:12px;background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.14);border-radius:8px;color:rgba(255,255,255,0.65);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.3px;text-decoration:none;transition:all 0.15s}
+.home-btn:hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.3);color:#fff}
+.home-btn svg{width:13px;height:13px}
 </style>
 </head>
 <body>
 
 <header>
-  <a class="home-btn" href="index.html">← Home</a>
+  <a class="home-btn" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>Tools</a>
   <div class="header-title">Pricelist Generator</div>
   <div class="header-sub">Jotun Decorative · WhatsApp Format</div>
 </header>
@@ -241,40 +245,40 @@ main { max-width: 600px; margin: 0 auto; padding: 16px 16px 60px; }
 <script>
 const PRODUCTS = {
   "Exterior": [
-    { name: "Jotashield Infinity",    tagline: "Ketahanan 15 Tahun",                  packs: ["20L","2.5L"] },
-    { name: "Jotashield Ultra Clean", tagline: "Ketahanan 8 Tahun (Self-Cleaning)",   packs: ["20L","2.5L"] },
-    { name: "Jotashield Antifade",    tagline: "Ketahanan 8 Tahun",                   packs: ["20L","2.5L"] },
-    { name: "Jotashield Flex",        tagline: "Ketahanan 6 Tahun Anti Retak",        packs: ["20L","2.5L"] },
-    { name: "Tough Shield Max",       tagline: "Ketahanan 4 Tahun",                   packs: ["18L","3.5L"] },
-    { name: "Tough Shield Matt",      tagline: "Ketahanan 3 Tahun",                   packs: ["18L","3.5L"] },
-    { name: "Waterguard",             tagline: "Cat Waterproofing",                   packs: ["15L","3.5L","0.9L"] },
-    { name: "Jotaroof",               tagline: "Cat untuk Atap",                      packs: ["20L","2.5L"] },
+    { name: "Jotashield Infinity",    tagline: "Ketahanan 15 Tahun",                  packs: ["2.5L","20L"] },
+    { name: "Jotashield Ultra Clean", tagline: "Ketahanan 8 Tahun (Self-Cleaning)",   packs: ["2.5L","20L"] },
+    { name: "Jotashield Antifade",    tagline: "Ketahanan 8 Tahun",                   packs: ["2.5L","20L"] },
+    { name: "Jotashield Flex",        tagline: "Ketahanan 6 Tahun Anti Retak",        packs: ["2.5L","20L"] },
+    { name: "Tough Shield Max",       tagline: "Ketahanan 4 Tahun",                   packs: ["3.5L","18L"] },
+    { name: "Tough Shield Matt",      tagline: "Ketahanan 3 Tahun",                   packs: ["3.5L","18L"] },
+    { name: "Waterguard",             tagline: "Cat Waterproofing",                   packs: ["0.9L","3.5L","15L"] },
+    { name: "Jotaroof",               tagline: "Cat untuk Atap",                      packs: ["2.5L","20L"] },
   ],
   "Interior": [
-    { name: "Majestic Pure Color",    tagline: "Tampilan Super Matt",                  packs: ["20L","2.5L"] },
-    { name: "Majestic Sense",         tagline: "Tampilan Kilat (Clean Air Technology)",packs: ["20L","2.5L"] },
-    { name: "Majestic True Beauty Sheen", tagline: "Tampilan Kilat",                       packs: ["20L","2.5L"] },
-    { name: "Majestic True Beauty Matt",  tagline: "Tampilan Doff",                        packs: ["20L","2.5L"] },
-    { name: "Essence Cover Plus",     tagline: "Tampilan Kilat",                       packs: ["18L","3.5L"] },
-    { name: "Essence Easy Wipe",      tagline: "Tampilan Doff",                        packs: ["18L","3.5L"] },
-    { name: "Jotaplast",              tagline: "Tampilan Doff",                        packs: ["18L","3.5L"] },
+    { name: "Majestic Pure Color",    tagline: "Tampilan Super Matt",                  packs: ["2.5L","20L"] },
+    { name: "Majestic Sense",         tagline: "Tampilan Kilat (Clean Air Technology)",packs: ["2.5L","20L"] },
+    { name: "Majestic True Beauty Sheen", tagline: "Tampilan Kilat",                       packs: ["2.5L","20L"] },
+    { name: "Majestic True Beauty Matt",  tagline: "Tampilan Doff",                        packs: ["2.5L","20L"] },
+    { name: "Essence Cover Plus",     tagline: "Tampilan Kilat",                       packs: ["3.5L","18L"] },
+    { name: "Essence Easy Wipe",      tagline: "Tampilan Doff",                        packs: ["3.5L","18L"] },
+    { name: "Jotaplast",              tagline: "Tampilan Doff",                        packs: ["3.5L","18L"] },
   ],
   "Primer": [
-    { name: "Cito Primer",          tagline: "", packs: ["20L","2.5L"] },
-    { name: "Ultra Primer",         tagline: "", packs: ["20L","2.5L"] },
-    { name: "Jotashield Primer",    tagline: "", packs: ["20L","2.5L"] },
-    { name: "Majestic Primer",      tagline: "", packs: ["20L","2.5L"] },
-    { name: "Tough Shield Primer",  tagline: "", packs: ["18L","3.5L"] },
-    { name: "Essence Easy Primer",  tagline: "", packs: ["18L","3.5L"] },
-    { name: "Jotaplast Primer",     tagline: "", packs: ["18L","3.5L"] },
-    { name: "Gardex Primer",        tagline: "", packs: ["5L","1L"] },
+    { name: "Cito Primer",          tagline: "", packs: ["2.5L","20L"], def: {"2.5L":303200,"20L":2369100} },
+    { name: "Ultra Primer",         tagline: "", packs: ["2.5L","20L"], def: {"2.5L":248900,"20L":1885500} },
+    { name: "Jotashield Primer",    tagline: "", packs: ["2.5L","20L"], def: {"2.5L":184250,"20L":1401200} },
+    { name: "Majestic Primer",      tagline: "", packs: ["2.5L","20L"], def: {"2.5L":173000,"20L":1286800} },
+    { name: "Tough Shield Primer",  tagline: "", packs: ["3.5L","18L"], def: {"3.5L":217500,"18L":1013500} },
+    { name: "Essence Easy Primer",  tagline: "", packs: ["3.5L","18L"], def: {"3.5L":206600,"18L":962700} },
+    { name: "Jotaplast Primer",     tagline: "", packs: ["3.5L","18L"], def: {"3.5L":145800,"18L":645600} },
+    { name: "Gardex Primer",        tagline: "", packs: ["1L","5L"], def: {"1L":99200,"5L":530200} },
   ],
   "W&M": [
-    { name: "Gardex Premium Gloss",    tagline: "Cat Kayu dan Besi Solvent Based", packs: ["5L","0.9L"] },
-    { name: "Majestic Supreme Finish", tagline: "Cat Kayu dan Besi Water Based",   packs: ["5L","0.9L"] },
+    { name: "Gardex Premium Gloss",    tagline: "Cat Kayu dan Besi Solvent Based", packs: ["0.9L","5L"] },
+    { name: "Majestic Supreme Finish", tagline: "Cat Kayu dan Besi Water Based",   packs: ["0.9L","5L"] },
   ],
   "W&M Primer": [
-    { name: "Majestic Primer W&M", tagline: "", packs: ["5L","0.9L"] },
+    { name: "Majestic Primer W&M", tagline: "", packs: ["1L","5L"], def: {"1L":102300,"5L":463500} },
   ],
 };
 
@@ -403,7 +407,7 @@ function renderPriceInputs(id, cat) {
         <span class="pack-label">${pack}</span>
         <input type="number" class="pack-input" id="price-${id}-${i}-${sanitize(pack)}"
                placeholder="0" min="0"
-               value="${saved[`${i}-${pack}`] || ''}"
+               value="${saved[`${i}-${pack}`] !== undefined ? saved[`${i}-${pack}`] : (p.def && p.def[pack] !== undefined ? p.def[pack] : '')}"
                oninput="updatePreview(${id})">
       </div>`).join('');
     html += `<div class="prod-prices">
