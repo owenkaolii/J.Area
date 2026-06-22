@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note Saver — 2 Receipts per A4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#F5F3EE; --surface:#FFFFFF; --border:#E2DDD4; --border2:#C8C3B8;
+    --text:#1A1814; --muted:#7A756C; --input:#FAFAF7;
+    --green:#166534; --greenbg:#F0FDF4; --amber:#92400E; --amberbg:#FFFBEB;
+    --font:'DM Sans',sans-serif; --display:'Space Grotesk',sans-serif; --radius:12px;
+  }
+  body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;
+    max-width:680px;margin:0 auto;padding:1.1rem 1rem 4rem;font-size:15px}
+  header{background:var(--text);margin:-1.1rem -1rem 1.4rem;padding:1.1rem 1.2rem 1.3rem;color:#fff}
+  .home-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px 6px 10px;margin-bottom:12px;background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.14);border-radius:8px;color:rgba(255,255,255,0.65);font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:0.3px;text-decoration:none;transition:all 0.15s}
+  .home-btn:hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.3);color:#fff}
+  .home-btn svg{width:13px;height:13px}
+  h1{font-family:var(--display);font-size:23px;font-weight:600;letter-spacing:-0.01em}
+  .sub{font-size:13px;color:rgba(255,255,255,0.65);margin-top:3px}
+
+  .card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius);padding:1.1rem;margin-bottom:1rem}
+  .drop{border:1.5px dashed var(--border2);border-radius:var(--radius);padding:2rem 1rem;text-align:center;cursor:pointer;transition:all 0.15s;background:var(--input)}
+  .drop:hover,.drop.over{border-color:var(--green);background:var(--greenbg)}
+  .drop svg{width:34px;height:34px;color:var(--muted);margin-bottom:8px}
+  .drop .big{font-family:var(--display);font-weight:600;font-size:15px;color:var(--text)}
+  .drop .small{font-size:12.5px;color:var(--muted);margin-top:3px}
+
+  .files{margin-top:0.9rem;display:none}
+  .files.show{display:block}
+  .file-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--input);border:0.5px solid var(--border);border-radius:8px;margin-bottom:6px;font-size:13px}
+  .file-row .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .file-row .pg{color:var(--muted);font-size:11.5px;flex-shrink:0}
+  .file-row .x{cursor:pointer;color:var(--muted);font-weight:700;padding:0 4px;flex-shrink:0}
+  .file-row .x:hover{color:#991B1B}
+  .summary{font-size:12px;color:var(--muted);margin-top:6px;text-align:right}
+
+  .opt{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
+  .opt .lbl{font-size:13.5px;font-weight:500}
+  .opt .desc{font-size:11.5px;color:var(--muted);margin-top:1px}
+  .toggle{position:relative;width:42px;height:24px;flex-shrink:0}
+  .toggle input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:var(--border2);border-radius:24px;cursor:pointer;transition:0.2s}
+  .slider:before{content:"";position:absolute;height:18px;width:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:0.2s}
+  .toggle input:checked+.slider{background:var(--green)}
+  .toggle input:checked+.slider:before{transform:translateX(18px)}
+
+  .btn{width:100%;padding:13px;background:var(--text);color:#fff;border:none;border-radius:var(--radius);font-family:var(--display);font-weight:600;font-size:15px;cursor:pointer;margin-top:1rem;transition:opacity 0.15s}
+  .btn:hover{opacity:0.9}
+  .btn:disabled{opacity:0.4;cursor:not-allowed}
+  .status{text-align:center;font-size:13px;color:var(--muted);margin-top:0.8rem;min-height:18px}
+  .status.ok{color:var(--green);font-weight:500}
+  .status.err{color:#991B1B}
+  .note{font-size:12px;color:var(--muted);background:var(--greenbg);border:0.5px solid #CDE9D5;border-radius:8px;padding:9px 11px;margin-top:1rem;line-height:1.55}
+  .note b{color:var(--green)}
+</style>
+</head>
+<body>
+<header>
+  <a class="home-btn" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>Tools</a>
+  <h1>Note Saver</h1>
+  <div class="sub">Combine 2 transaction receipts onto one A4 sheet — save paper</div>
+</header>
+
+<div class="card">
+  <div class="drop" id="drop">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+    <div class="big">Choose or drop PDF files</div>
+    <div class="small">Transaction receipts from email — several files at once is fine</div>
+  </div>
+  <input type="file" id="fileInput" accept="application/pdf" multiple style="display:none">
+  <div class="files" id="fileList"></div>
+</div>
+
+<div class="card" id="optCard" style="display:none">
+  <div class="opt">
+    <div>
+      <div class="lbl">Cut guide line</div>
+      <div class="desc">Dashed line down the middle to guide your scissors</div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="cutline" checked><span class="slider"></span></label>
+  </div>
+</div>
+
+<button class="btn" id="go" disabled>Create Saved PDF</button>
+<div class="status" id="status"></div>
+
+<div class="note">
+  <b>Full receipt preserved.</b> Each note is placed complete — header, details, and official footer — so it stays valid as proof. Two receipts sit side by side on one landscape A4. Everything runs on this device; your files are never uploaded. Internet is only needed to load the page the first time.
+</div>
+
+<script>
+const { PDFDocument } = PDFLib;
+let files = [];
+const drop=document.getElementById('drop'), input=document.getElementById('fileInput');
+const fileList=document.getElementById('fileList'), optCard=document.getElementById('optCard');
+const go=document.getElementById('go'), status=document.getElementById('status');
+const cutlineEl=document.getElementById('cutline');
+
+drop.onclick=()=>input.click();
+input.onchange=e=>addFiles(e.target.files);
+['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over')}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over')}));
+drop.addEventListener('drop',e=>addFiles(e.dataTransfer.files));
+
+async function addFiles(fl){
+  for(const f of fl){
+    if(f.type!=='application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) continue;
+    const buf=await f.arrayBuffer();
+    let pages=0;
+    try{ const d=await PDFDocument.load(buf,{ignoreEncryption:true}); pages=d.getPageCount(); }
+    catch(e){ status.textContent='Could not read '+f.name; status.className='status err'; continue; }
+    files.push({name:f.name, buf, pages});
+  }
+  render();
+}
+function render(){
+  if(!files.length){ fileList.classList.remove('show'); optCard.style.display='none'; go.disabled=true; return; }
+  fileList.classList.add('show'); optCard.style.display='block';
+  const total=files.reduce((s,f)=>s+f.pages,0);
+  fileList.innerHTML=files.map((f,i)=>`<div class="file-row"><span class="nm">${f.name}</span><span class="pg">${f.pages} pg</span><span class="x" onclick="removeFile(${i})">✕</span></div>`).join('')
+    +`<div class="summary">${total} receipts → ${Math.ceil(total/2)} A4 sheets (saves ${total-Math.ceil(total/2)} sheets)</div>`;
+  go.disabled=false;
+}
+function removeFile(i){ files.splice(i,1); render(); }
+
+go.onclick=async()=>{
+  go.disabled=true; status.className='status'; status.textContent='Processing…';
+  try{
+    const A4L=[841.89,595.28], MARGIN=14, GAP=12;
+    const cut=cutlineEl.checked;
+    const out=await PDFDocument.create();
+    const srcPages=[];
+    for(const f of files){
+      const d=await PDFDocument.load(f.buf,{ignoreEncryption:true});
+      for(let i=0;i<d.getPageCount();i++) srcPages.push({doc:d,idx:i});
+    }
+    const slotW=(A4L[0]-2*MARGIN-GAP)/2, slotH=A4L[1]-2*MARGIN;
+    for(let i=0;i<srcPages.length;i+=2){
+      const page=out.addPage(A4L);
+      for(let s=0;s<2;s++){
+        const sp=srcPages[i+s]; if(!sp) break;
+        const src=sp.doc.getPage(sp.idx);
+        const {width:pw,height:ph}=src.getSize();
+        const emb=await out.embedPage(src);
+        const scale=Math.min(slotW/pw, slotH/ph);
+        const dw=pw*scale, dh=ph*scale;
+        const slotLeft=MARGIN+s*(slotW+GAP);
+        const x=slotLeft+(slotW-dw)/2, y=MARGIN+(slotH-dh)/2;
+        page.drawPage(emb,{x,y,xScale:scale,yScale:scale});
+      }
+      if(cut && srcPages[i+1]){
+        const midX=MARGIN+slotW+GAP/2;
+        page.drawLine({start:{x:midX,y:20},end:{x:midX,y:A4L[1]-20},thickness:0.5,opacity:0.3,dashArray:[5,4]});
+      }
+    }
+    const bytes=await out.save();
+    const blob=new Blob([bytes],{type:'application/pdf'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    const today=new Date().toISOString().slice(0,10);
+    a.href=url; a.download=`note-saver-${today}.pdf`; a.click();
+    URL.revokeObjectURL(url);
+    status.className='status ok';
+    status.textContent=`Done — ${srcPages.length} receipts on ${Math.ceil(srcPages.length/2)} A4 sheets.`;
+  }catch(e){
+    status.className='status err'; status.textContent='Something went wrong: '+e.message;
+  }
+  go.disabled=false;
+};
+</script>
+</body>
+</html>
