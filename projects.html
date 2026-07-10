@@ -9,12 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#F5F3EE;--surface:#FFFFFF;--border:#E2DDD4;--border2:#C8C3B8;
-  --text:#1A1814;--muted:#7A756C;--input:#FAFAF7;
-  --green:#166534;--greenbg:#F0FDF4;--amber:#92400E;--amberbg:#FFFBEB;--blue:#1E4E8C;--bluebg:#EFF5FC;
-  --font:'DM Sans',sans-serif;--display:'Space Grotesk',sans-serif;--radius:12px;
-}
+:root{--bg:#F5F3EE;--surface:#FFFFFF;--border:#E2DDD4;--border2:#C8C3B8;--text:#1A1814;--muted:#7A756C;--input:#FAFAF7;--green:#166534;--greenbg:#F0FDF4;--amber:#92400E;--amberbg:#FFFBEB;--blue:#1E4E8C;--bluebg:#EFF5FC;--font:'DM Sans',sans-serif;--display:'Space Grotesk',sans-serif;--radius:12px}
 body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.55;max-width:680px;margin:0 auto;padding:1.1rem 1rem 5.5rem;font-size:15px}
 header{background:var(--text);margin:-1.1rem -1rem 1.2rem;padding:1.1rem 1.2rem 1.2rem;color:#fff;position:sticky;top:0;z-index:10}
 .home-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px 6px 10px;margin-bottom:11px;background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.14);border-radius:8px;color:rgba(255,255,255,0.65);font-size:11px;font-weight:600;letter-spacing:0.3px;text-decoration:none}
@@ -31,16 +26,14 @@ h1{font-family:var(--display);font-size:22px;font-weight:600}
 .toolbar{display:flex;gap:8px;margin-bottom:0.9rem;align-items:center}
 .search{flex:1;background:var(--input);border:0.5px solid var(--border2);border-radius:9px;padding:9px 12px;font-family:var(--font);font-size:14px;color:var(--text)}
 .card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius);padding:13px 14px;margin-bottom:9px;cursor:pointer;transition:border-color .12s}
-.card:hover{border-color:var(--muted)}
-.card.flat{cursor:default}.card.flat:hover{border-color:var(--border2)}
+.card:hover{border-color:var(--muted)}.card.flat{cursor:default}.card.flat:hover{border-color:var(--border2)}
 .card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .card .nm{font-family:var(--display);font-size:16px;font-weight:600}
 .card .meta{font-size:12.5px;color:var(--muted);margin-top:2px}
-.card .badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.04em;flex-shrink:0}
+.badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.04em;flex-shrink:0}
 .badge.ongoing{background:var(--bluebg);color:var(--blue)}.badge.completed{background:var(--greenbg);color:var(--green)}
-.badge.ctype{background:var(--amberbg);color:var(--amber)}
-.badge.std{background:var(--bluebg);color:var(--blue)}.badge.hook{background:var(--amberbg);color:var(--amber)}
-.badge.ext{background:#EEF2F6;color:#475569}.badge.int{background:#F4EFF7;color:#7C3AED}
+.badge.ctype{background:var(--amberbg);color:var(--amber)}.badge.hook{background:var(--amberbg);color:var(--amber)}
+.badge.cat{background:#EEF2F6;color:#475569}
 .card .stat{font-family:var(--display);font-size:14px;font-weight:600;color:var(--green);margin-top:6px}
 .card .sub2{font-size:12px;color:var(--muted);margin-top:3px}
 .arrow{color:var(--border2);font-size:20px;align-self:center}
@@ -51,22 +44,26 @@ h1{font-family:var(--display);font-size:22px;font-weight:600}
 .btn.gold{background:var(--text);color:#fff;border-color:var(--text)}
 .btn.sm{padding:7px 12px;font-size:13px;border-radius:9px}
 .btnrow{display:flex;gap:7px;flex-wrap:wrap}
-.section-label{font-family:var(--display);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin:1.2rem 0 0.6rem;display:flex;justify-content:space-between;align-items:center}
+.section-label{font-family:var(--display);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin:1.2rem 0 0.6rem}
 .kv{display:flex;justify-content:space-between;padding:7px 0;border-top:1px solid var(--border);font-size:14px;gap:10px}
 .kv:first-child{border-top:none}.kv .k{color:var(--muted)}.kv .v{font-weight:500;text-align:right}
-.ht{background:var(--surface);border:0.5px solid var(--border2);border-radius:11px;padding:12px;margin-bottom:8px}
-.ht .htop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.ht .hname{font-family:var(--display);font-size:15px;font-weight:600;display:flex;align-items:center;gap:7px}
-.ht .hunits{font-size:12px;color:var(--muted);text-align:right}
-.thumb{width:100%;max-height:160px;object-fit:cover;border-radius:9px;border:1px solid var(--border);margin:8px 0;display:block}
-.surf{display:flex;align-items:center;gap:8px;font-size:13px;padding:8px 0;border-top:1px solid var(--border)}
-.surf .si{flex:1;min-width:0}
-.surf .sl{font-weight:500}
-.surf .sm2{font-size:11.5px;color:var(--muted);font-family:var(--display)}
-.surf .scost{font-family:var(--display);font-size:13px;font-weight:600;color:var(--green);text-align:right;white-space:nowrap}
-.surf .del{color:var(--border2);cursor:pointer;font-weight:700;padding:0 3px}.surf .del:hover{color:#991B1B}
-.miniadd{font-size:12px;color:var(--blue);cursor:pointer;margin-top:9px;display:inline-block;font-weight:600}
-.warn{background:var(--amberbg);border:0.5px solid #F0E0C0;border-radius:9px;padding:9px 11px;font-size:12px;color:var(--amber);margin-bottom:10px;line-height:1.5}
+.thumb{width:100%;max-height:160px;object-fit:cover;border-radius:9px;border:1px solid var(--border);margin:8px 0;display:block;cursor:pointer}
+.pline{padding:10px 0;border-top:1px solid var(--border)}
+.pline:first-child{border-top:none}
+.pline .ph{display:flex;align-items:flex-start;gap:9px}
+.pline .sw{width:14px;height:14px;border-radius:4px;border:1px solid var(--border2);flex-shrink:0;margin-top:3px}
+.pline .pi{flex:1;min-width:0}
+.pline .pn{font-weight:600;font-size:14px}
+.pline .pm{font-size:11.5px;color:var(--muted);font-family:var(--display);margin-top:1px}
+.pline .acts{display:flex;gap:3px}
+.pline .acts span{color:var(--border2);cursor:pointer;font-weight:700;padding:0 4px;font-size:14px}
+.pline .acts span:hover{color:#991B1B}
+.calcline{background:var(--greenbg);border:0.5px solid #CDE9D5;border-radius:8px;padding:8px 10px;margin-top:7px;font-size:12.5px}
+.calcline .cmain{display:flex;justify-content:space-between;align-items:baseline}
+.calcline .cmain .cm{font-family:var(--display);font-weight:600;color:var(--green);font-size:15px}
+.calcline .crange{font-size:11px;color:var(--muted);font-family:var(--display);margin-top:3px}
+.miniadd{font-size:12.5px;color:var(--blue);cursor:pointer;margin-top:10px;display:inline-block;font-weight:600}
+.warn{background:var(--amberbg);border:0.5px solid #F0E0C0;border-radius:9px;padding:9px 11px;font-size:12px;color:var(--amber);margin-bottom:10px;line-height:1.5}.warn b{cursor:pointer}
 .modal{position:fixed;inset:0;background:rgba(20,18,15,0.5);display:none;align-items:flex-end;justify-content:center;z-index:40}
 .modal.on{display:flex}
 .sheet{background:var(--surface);border-radius:18px 18px 0 0;padding:20px;max-width:680px;width:100%;max-height:92vh;overflow-y:auto}
@@ -75,17 +72,18 @@ h1{font-family:var(--display);font-size:22px;font-weight:600}
 .field label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:5px}
 .field input,.field select,.field textarea{width:100%;background:var(--input);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;font-family:var(--font);font-size:15px;color:var(--text)}
 .field .hint{font-size:11px;color:var(--muted);margin-top:4px;font-style:italic}
-.row2{display:flex;gap:10px}.row2 .field{flex:1}.row3{display:flex;gap:8px}.row3 .field{flex:1}
+.row2{display:flex;gap:10px}.row2 .field{flex:1}
 .sheet .btnrow{margin-top:8px}
 .del-btn{color:#991B1B;background:none;border:none;font-size:13px;cursor:pointer;font-family:var(--font);padding:8px 0;font-weight:500}
 .opt{font-size:11px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
-.dimcalc{background:var(--bluebg);border-radius:8px;padding:9px 10px;font-size:12px;margin-top:6px}
-.dimcalc b{color:var(--blue);cursor:pointer}
-.calcbox{background:var(--greenbg);border:0.5px solid #CDE9D5;border-radius:9px;padding:10px 12px;margin-top:8px;font-size:13px}
-.calcbox .ct{font-family:var(--display);font-weight:600;color:var(--green);font-size:15px}
-.seg{display:flex;gap:0;border:1px solid var(--border2);border-radius:9px;overflow:hidden}
+.seg{display:flex;border:1px solid var(--border2);border-radius:9px;overflow:hidden}
 .seg button{flex:1;padding:9px;border:none;background:var(--input);font-family:var(--font);font-size:14px;cursor:pointer;color:var(--muted)}
 .seg button.on{background:var(--text);color:#fff;font-weight:600}
+.cov{background:var(--bluebg);border-radius:8px;padding:9px 11px;font-size:12px;color:var(--blue);margin-top:6px;font-family:var(--display)}
+.livecalc{background:var(--greenbg);border:0.5px solid #CDE9D5;border-radius:9px;padding:11px 12px;margin-top:8px}
+.livecalc .lc{display:flex;justify-content:space-between;font-size:13px;padding:3px 0}
+.livecalc .lc .v{font-family:var(--display);font-weight:600}
+.livecalc .lc.head .v{color:var(--green);font-size:16px}
 </style>
 </head>
 <body>
@@ -99,43 +97,52 @@ h1{font-family:var(--display);font-size:22px;font-weight:600}
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
 <script>
 "use strict";
-const KEY='jproj_v2';
-let DB=load()||{products:[],settings:{hookMultiplier:1.4},customers:[]};
-if(!DB.products)DB.products=[];if(!DB.settings)DB.settings={hookMultiplier:1.4};
+const CATALOG=[{"code":"infinity2,5","product":"JOTASHIELD INFINITY","category":"Exterior","size":2.5,"price":485300,"covMin":9.5,"covMax":12.7},{"code":"infinity20","product":"JOTASHIELD INFINITY","category":"Exterior","size":20.0,"price":3490200,"covMin":9.5,"covMax":12.7},{"code":"ultraclean2,5","product":"JOTASHIELD ULTRA CLEAN","category":"Exterior","size":2.5,"price":414750,"covMin":9.5,"covMax":12.7},{"code":"ultraclean18","product":"JOTASHIELD ULTRA CLEAN","category":"Exterior","size":20.0,"price":3114000,"covMin":9.5,"covMax":12.7},{"code":"af2,5","product":"JOTASHIELD ANTIFADE","category":"Exterior","size":2.5,"price":393200,"covMin":9.8,"covMax":13.0},{"code":"af20","product":"JOTASHIELD ANTIFADE","category":"Exterior","size":20.0,"price":2952100,"covMin":9.8,"covMax":13.0},{"code":"flex2,5","product":"JOTASHIELD FLEX","category":"Exterior","size":2.5,"price":412900,"covMin":5.0,"covMax":7.5},{"code":"flex20","product":"JOTASHIELD FLEX","category":"Exterior","size":20.0,"price":3081300,"covMin":5.0,"covMax":7.5},{"code":"max2,5","product":"TOUGH SHIELD MAX","category":"Exterior","size":2.5,"price":358100,"covMin":9.3,"covMax":12.3},{"code":"max20","product":"TOUGH SHIELD MAX","category":"Exterior","size":20.0,"price":1788200,"covMin":9.3,"covMax":12.3},{"code":"toughshield3,5","product":"TOUGH SHIELD MATT","category":"Exterior","size":3.5,"price":251200,"covMin":9.3,"covMax":12.3},{"code":"toughshield18","product":"TOUGH SHIELD MATT","category":"Exterior","size":18.0,"price":1149100,"covMin":9.3,"covMax":12.3},{"code":"waterguard0,9","product":"WATERGUARD","category":"Exterior","size":0.9,"price":97000,"covMin":5.5,"covMax":7.5},{"code":"waterguard3,5","product":"WATERGUARD","category":"Exterior","size":3.5,"price":339050,"covMin":5.5,"covMax":7.5},{"code":"waterguard15","product":"WATERGUARD","category":"Exterior","size":15.0,"price":1427600,"covMin":5.5,"covMax":7.5},{"code":"jotaroof2,5","product":"JOTAROOF","category":"Exterior","size":2.5,"price":242700,"covMin":9.8,"covMax":13.0},{"code":"jotaroof20","product":"JOTAROOF","category":"Exterior","size":20.0,"price":1843400,"covMin":9.8,"covMax":13.0},{"code":"puco2,5","product":"MAJESTIC PURE COLOR","category":"Interior","size":2.5,"price":385350,"covMin":10.5,"covMax":14.0},{"code":"puco20","product":"MAJESTIC PURE COLOR","category":"Interior","size":20.0,"price":2814000,"covMin":10.5,"covMax":14.0},{"code":"sense2,5","product":"MAJESTIC SENSE","category":"Interior","size":2.5,"price":353100,"covMin":5.9,"covMax":8.2},{"code":"sense20","product":"MAJESTIC SENSE","category":"Interior","size":20.0,"price":2583000,"covMin":5.9,"covMax":8.2},{"code":"tbsheen2,5","product":"MAJESTIC TRUE BEAUTY SHEEN","category":"Interior","size":2.5,"price":334500,"covMin":9.0,"covMax":12.0},{"code":"tbsheen20","product":"MAJESTIC TRUE BEAUTY SHEEN","category":"Interior","size":20.0,"price":2317900,"covMin":9.0,"covMax":12.0},{"code":"tbmatt2,5","product":"MAJESTIC TRUE BEAUTY MATT","category":"Interior","size":2.5,"price":279400,"covMin":9.0,"covMax":12.0},{"code":"tbmatt20","product":"MAJESTIC TRUE BEAUTY MATT","category":"Interior","size":20.0,"price":2047000,"covMin":9.0,"covMax":12.0},{"code":"coverplus3,5","product":"ESSENCE COVER PLUS","category":"Interior","size":3.5,"price":301000,"covMin":8.7,"covMax":11.6},{"code":"coverplus18","product":"ESSENCE COVER PLUS","category":"Interior","size":18.0,"price":1346800,"covMin":8.7,"covMax":11.6},{"code":"easywipe3,5","product":"ESSENCE EASY WIPE","category":"Interior","size":3.5,"price":230300,"covMin":9.3,"covMax":11.3},{"code":"easywipe18","product":"ESSENCE EASY WIPE","category":"Interior","size":18.0,"price":1087900,"covMin":9.3,"covMax":11.3},{"code":"jotaplast3,5","product":"JOTAPLAST","category":"Interior","size":3.5,"price":175800,"covMin":9.0,"covMax":12.0},{"code":"jotaplast18","product":"JOTAPLAST","category":"Interior","size":18.0,"price":811000,"covMin":9.0,"covMax":12.0},{"code":"cito2,5","product":"CITO PRIMER","category":"Primer","size":2.5,"price":270700,"covMin":6.3,"covMax":8.3},{"code":"cito20","product":"CITO PRIMER","category":"Primer","size":20.0,"price":2153700,"covMin":6.3,"covMax":8.3},{"code":"ultraprimer2,5","product":"ULTRA PRIMER","category":"Primer","size":2.5,"price":230500,"covMin":8.0,"covMax":10.7},{"code":"ultraprimer20","product":"ULTRA PRIMER","category":"Primer","size":20.0,"price":1778800,"covMin":8.0,"covMax":10.7},{"code":"jotashieldprimer2,5","product":"JOTASHIELD PRIMER","category":"Primer","size":2.5,"price":170600,"covMin":8.0,"covMax":10.7},{"code":"jotashieldprimer20","product":"JOTASHIELD PRIMER","category":"Primer","size":20.0,"price":1321900,"covMin":8.0,"covMax":10.7},{"code":"majesticprimer2,5","product":"MAJESTIC PRIMER","category":"Primer","size":2.5,"price":160200,"covMin":8.0,"covMax":10.7},{"code":"majesticprimer20","product":"MAJESTIC PRIMER","category":"Primer","size":20.0,"price":1214000,"covMin":8.0,"covMax":10.7},{"code":"toughshieldprimer3,5","product":"TOUGH SHIELD PRIMER","category":"Primer","size":3.5,"price":203300,"covMin":8.8,"covMax":11.6},{"code":"toughshieldprimer18","product":"TOUGH SHIELD PRIMER","category":"Primer","size":18.0,"price":965200,"covMin":8.8,"covMax":11.6},{"code":"easyprimer3,5","product":"ESSENCE EASY PRIMER","category":"Primer","size":3.5,"price":193100,"covMin":8.8,"covMax":11.6},{"code":"easyprimer18","product":"ESSENCE EASY PRIMER","category":"Primer","size":18.0,"price":916900,"covMin":8.8,"covMax":11.6},{"code":"jotaplastprimer3,5","product":"JOTAPLAST PRIMER","category":"Primer","size":3.5,"price":136300,"covMin":9.0,"covMax":12.0},{"code":"jotaplastprimer18","product":"JOTAPLAST PRIMER","category":"Primer","size":18.0,"price":614900,"covMin":9.0,"covMax":12.0},{"code":"gardexprimer1","product":"GARDEX PRIMER","category":"Primer","size":1.0,"price":90200,"covMin":10.0,"covMax":17.0},{"code":"gardexprimer5","product":"GARDEX PRIMER","category":"Primer","size":5.0,"price":482000,"covMin":10.0,"covMax":17.0},{"code":"gardex0,9","product":"GARDEX PREMIUM GLOSS","category":"W&M","size":0.9,"price":121600,"covMin":12.0,"covMax":16.0},{"code":"gardex5","product":"GARDEX PREMIUM GLOSS","category":"W&M","size":5.0,"price":611200,"covMin":12.0,"covMax":16.0},{"code":"majesticsf0,9","product":"MAJESTIC SUPREME FINISH","category":"W&M","size":0.9,"price":155500,"covMin":9.5,"covMax":12.7},{"code":"majesticsf5","product":"MAJESTIC SUPREME FINISH","category":"W&M","size":5.0,"price":775550,"covMin":9.5,"covMax":12.7},{"code":"majesticsfprimer0,9","product":"MAJESTIC PRIMER WOOD & METAL","category":"W&M Primer","size":0.9,"price":94700,"covMin":7.8,"covMax":13.0},{"code":"majesticsfprimer5","product":"MAJESTIC PRIMER WOOD & METAL","category":"W&M Primer","size":5.0,"price":429200,"covMin":7.8,"covMax":13.0}];
+
+const CATS=['Exterior','Interior','Primer','W&M','W&M Primer'];
+function coatsFor(cat){return (cat==='Primer'||cat==='W&M Primer')?1:2;}
+function sizeLabel(s){return s+'L '+(s>=15?'pail':'can');}
+function catItem(code){return CATALOG.find(c=>c.code===code);}
+function prodsIn(cat){const seen={};const out=[];for(const c of CATALOG)if(c.category===cat&&!seen[c.product]){seen[c.product]=1;out.push(c.product);}return out;}
+function sizesOf(cat,product){return CATALOG.filter(c=>c.category===cat&&c.product===product);}
+
+const KEY='jproj_v4';
+let DB=load()||{prices:{},customers:[]};
+if(!DB.prices)DB.prices={};
 let view={level:'customers',custId:null,projId:null,htId:null};
 let search='';
 
 function load(){try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):null;}catch(e){return null;}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){alert('Storage full — likely too many photos. Export a JSON backup and remove some images.');}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){alert('Storage full — export a JSON backup and remove some photos.');}}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function fmt(n){return Math.round(n||0).toLocaleString('en-US');}
-function f1(n){return (Math.round((n||0)*10)/10).toLocaleString('en-US');}
+function f2(n){return (Math.round((n||0)*100)/100).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
 const $=id=>document.getElementById(id);
 function esc(s){return (s==null?'':''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
 function cust(id){return DB.customers.find(c=>c.id===id);}
 function proj(c,id){return c?c.projects.find(p=>p.id===id):null;}
-function prod(id){return DB.products.find(p=>p.id===id);}
+function basePrice(code){return DB.prices[code]!=null?DB.prices[code]:(catItem(code)?catItem(code).price:0);}
 
-/* ---------- PAINT CALC ENGINE ---------- */
-function surfaceCalc(ht,sf){
-  const pr=prod(sf.productId);if(!pr)return null;
-  const coats=(sf.coats||pr.coats||2);
-  let area=sf.area||0;
-  if(ht.variant==='hook'&&pr.surface==='ext')area*=(DB.settings.hookMultiplier||1.4);
-  const rate=pr.spreadRate||1;
-  const litersPerHouse=area*coats/rate;
-  const totalLiters=litersPerHouse*(ht.units||0);
-  const pails=pr.packSize?Math.ceil(totalLiters/pr.packSize):0;
-  const cost=pails*(pr.price||0);
-  return {pr,coats,area,litersPerHouse,totalLiters,pails,cost};
+/* ---------- CALC: m² → liters → packs → price, min/avg/max (exact) ---------- */
+function lineCalc(pl){
+  const ci=catItem(pl.code);if(!ci)return null;
+  const coats=coatsFor(ci.category);
+  const sqm=pl.sqm||0;
+  const price=pl.price!=null?pl.price:basePrice(pl.code);
+  const covAvg=(ci.covMin+ci.covMax)/2;
+  // min coverage => most paint (high); max coverage => least paint (low)
+  const Lavg=sqm*coats/covAvg, Lhigh=sqm*coats/ci.covMin, Llow=sqm*coats/ci.covMax;
+  const pAvg=Lavg/ci.size, pLow=Llow/ci.size, pHigh=Lhigh/ci.size;
+  return {ci,coats,sqm,price,covAvg,
+    litersAvg:Lavg,litersLow:Llow,litersHigh:Lhigh,
+    packsAvg:pAvg,packsLow:pLow,packsHigh:pHigh,
+    costAvg:pAvg*price,costLow:pLow*price,costHigh:pHigh*price};
 }
-function htTotals(ht){let cost=0,liters=0;const byProd={};
-  for(const sf of ht.surfaces||[]){const c=surfaceCalc(ht,sf);if(!c)continue;cost+=c.cost;liters+=c.totalLiters;
-    if(!byProd[c.pr.name])byProd[c.pr.name]={pails:0,cost:0};byProd[c.pr.name].pails+=c.pails;byProd[c.pr.name].cost+=c.cost;}
-  return {cost,liters,byProd};}
-function projValue(p){let v=0;for(const ht of p.houseTypes||[])v+=htTotals(ht).cost;return v;}
-function projPaint(p){const agg={};for(const ht of p.houseTypes||[]){const t=htTotals(ht);for(const k in t.byProd){if(!agg[k])agg[k]={pails:0,cost:0};agg[k].pails+=t.byProd[k].pails;agg[k].cost+=t.byProd[k].cost;}}return agg;}
+function htTotals(ht){let avg=0,low=0,high=0;for(const pl of ht.paints||[]){const c=lineCalc(pl);if(!c)continue;avg+=c.costAvg;low+=c.costLow;high+=c.costHigh;}return {avg,low,high};}
+function projValue(p){let v=0;for(const ht of p.houseTypes||[])v+=htTotals(ht).avg;return v;}
+function projPaint(p){const agg={};for(const ht of p.houseTypes||[])for(const pl of ht.paints||[]){const c=lineCalc(pl);if(!c)continue;
+  const key=c.ci.product+' '+sizeLabel(c.ci.size)+(pl.color?' · '+pl.color:'');
+  if(!agg[key])agg[key]={sqm:0,packsAvg:0,costAvg:0};agg[key].sqm+=c.sqm;agg[key].packsAvg+=c.packsAvg;agg[key].costAvg+=c.costAvg;}return agg;}
 function custValue(c){return (c.projects||[]).reduce((s,p)=>s+projValue(p),0);}
 
 /* ---------- RENDER ---------- */
@@ -149,8 +156,7 @@ function renderCustomers(){
     <div class="scard"><div class="k">Customers</div><div class="v">${DB.customers.length}</div></div>
     <div class="scard"><div class="k">Projects</div><div class="v">${tp}</div></div>
     <div class="scard"><div class="k">Paint Value</div><div class="v money">Rp ${fmt(tv)}</div></div></div>`;
-  h+=`<div class="toolbar"><input class="search" id="search" placeholder="Search customer..." value="${esc(search)}"><button class="btn sm" onclick="goProducts()">Products</button></div>`;
-  if(!DB.products.length)h+=`<div class="warn"><b>Set up products first.</b> Paint and cost are calculated from each product's spreading rate, pack size, and price. Tap <b>Products</b> to add yours.</div>`;
+  h+=`<div class="toolbar"><input class="search" id="search" placeholder="Search customer..." value="${esc(search)}"><button class="btn sm" onclick="goProducts()">Prices</button></div>`;
   const list=DB.customers.filter(c=>c.name.toLowerCase().includes(search.toLowerCase())).sort((a,b)=>a.name.localeCompare(b.name));
   if(!DB.customers.length)h+=`<div class="empty">No customers yet.<br>Add your first customer to start recording won projects.</div>`;
   else if(!list.length)h+=`<div class="empty">No customer matches "${esc(search)}".</div>`;
@@ -164,23 +170,18 @@ function renderCustomers(){
   $('fab').innerHTML=`<button class="btn" onclick="exportCSV()">Export Excel</button><button class="btn sm" onclick="exportJSON()">Backup</button><button class="btn gold" onclick="editCust()">+ Customer</button>`;
   const s=$('search');if(s)s.oninput=e=>{search=e.target.value;renderCustomers();};
 }
-
 function renderProducts(){
-  setCrumb(`<a onclick="goCustomers()">Customers</a> › <b>Products</b>`,'Products');
-  let h=`<div class="warn">These drive every paint and cost number. Set each product's <b>spreading rate</b> (m²/L), <b>pack size</b> (L per pail), <b>price</b> per pail, and default <b>coats</b>.</div>`;
-  h+=`<div class="card flat"><div class="kv"><span class="k">Hook exterior multiplier</span><span class="v">×${DB.settings.hookMultiplier||1.4}</span></div>
-    <div class="btnrow" style="margin-top:8px"><button class="btn sm" onclick="editHook()">Edit hook factor</button></div></div>`;
-  h+=`<div class="section-label">Products</div>`;
-  if(!DB.products.length)h+=`<div class="empty">No products yet. Add the paints you sell so the tool can calculate.</div>`;
-  for(const p of DB.products){
-    h+=`<div class="card" onclick="editProduct('${p.id}')"><div class="top"><div>
-      <div class="nm" style="font-size:15px">${esc(p.name)} <span class="badge ${p.surface}">${p.surface}</span></div>
-      <div class="meta">${f1(p.spreadRate)} m²/L · ${f1(p.packSize)} L/pail · ${p.coats||2} coats</div>
-      <div class="stat">Rp ${fmt(p.price)} / pail</div></div><div class="arrow">›</div></div></div>`;}
+  setCrumb(`<a onclick="goCustomers()">Customers</a> › <b>Price list</b>`,'Price List');
+  let h=`<div class="warn">Base prices from your TDS list. Edit any that changed — paint lines prefill from here, but each line keeps its own price for historical accuracy.</div>`;
+  for(const cat of CATS){h+=`<div class="section-label">${cat} · ${coatsFor(cat)} coat${coatsFor(cat)>1?'s':''}</div>`;
+    for(const product of prodsIn(cat)){for(const it of sizesOf(cat,product)){const pr=basePrice(it.code);const edited=DB.prices[it.code]!=null;
+      h+=`<div class="card" style="padding:10px 13px" onclick="editPrice('${it.code}')"><div class="top"><div>
+        <div class="nm" style="font-size:14px">${esc(it.product)} <span class="badge cat">${sizeLabel(it.size)}</span></div>
+        <div class="meta">${it.covMin}–${it.covMax} m²/L per coat</div></div>
+        <div class="stat" style="color:${edited?'var(--amber)':'var(--green)'}">Rp ${fmt(pr)}</div></div></div>`;}}}
   $('app').innerHTML=h;
-  $('fab').innerHTML=`<button class="btn" onclick="goCustomers()">‹ Back</button><button class="btn gold" onclick="editProduct()">+ Product</button>`;
+  $('fab').innerHTML=`<button class="btn" onclick="goCustomers()">‹ Back</button>`;
 }
-
 function renderCustomer(){
   const c=cust(view.custId);if(!c){view.level='customers';return render();}
   setCrumb(`<a onclick="goCustomers()">Customers</a> › <b>${esc(c.name)}</b>`,c.name);
@@ -195,8 +196,7 @@ function renderCustomer(){
     <div class="btnrow" style="margin-top:10px"><button class="btn sm" onclick="editCust('${c.id}')">Edit customer</button></div></div>`;
   h+=`<div class="section-label">Projects</div>`;
   if(!c.projects.length)h+=`<div class="empty">No projects yet for this customer.</div>`;
-  for(const p of [...c.projects].sort((a,b)=>(b.dateWon||'').localeCompare(a.dateWon||''))){
-    const types=(p.houseTypes||[]).length;
+  for(const p of [...c.projects].sort((a,b)=>(b.dateWon||'').localeCompare(a.dateWon||''))){const types=(p.houseTypes||[]).length;
     h+=`<div class="card" onclick="openProj('${p.id}')"><div class="top"><div>
       <div class="nm">${esc(p.name)}</div>
       <div class="meta">${p.location?esc(p.location)+' · ':''}${p.dateWon||''}</div>
@@ -206,7 +206,6 @@ function renderCustomer(){
   $('app').innerHTML=h;
   $('fab').innerHTML=`<button class="btn" onclick="goCustomers()">‹ Back</button><button class="btn gold" onclick="editProj()">+ Project</button>`;
 }
-
 function renderProject(){
   const c=cust(view.custId),p=proj(c,view.projId);if(!p){view.level='customer';return render();}
   setCrumb(`<a onclick="goCustomers()">Customers</a> › <a onclick="openCust('${c.id}')">${esc(c.name)}</a> › <b>${esc(p.name)}</b>`,p.name);
@@ -215,55 +214,50 @@ function renderProject(){
     <div class="kv"><span class="k">Status</span><span class="v">${p.status==='completed'?'Completed':'Ongoing'}</span></div>
     ${p.location?`<div class="kv"><span class="k">Location</span><span class="v">${esc(p.location)}</span></div>`:''}
     ${p.dateWon?`<div class="kv"><span class="k">Date won</span><span class="v">${p.dateWon}</span></div>`:''}
-    <div class="kv"><span class="k">Total paint value</span><span class="v" style="color:var(--green)">Rp ${fmt(projValue(p))}</span></div>
+    <div class="kv"><span class="k">Paint value (avg)</span><span class="v" style="color:var(--green)">Rp ${fmt(projValue(p))}</span></div>
     ${p.notes?`<div class="kv"><span class="k">Notes</span><span class="v" style="max-width:62%">${esc(p.notes)}</span></div>`:''}
     <div class="btnrow" style="margin-top:10px"><button class="btn sm" onclick="editProj('${p.id}')">Edit project</button></div></div>`;
   h+=`<div class="section-label">House Types</div>`;
-  if(!(p.houseTypes||[]).length)h+=`<div class="empty">No house types yet.<br>Add a type (e.g. "Tipe 45"), mark it standard or hook, and add its surfaces to calculate paint.</div>`;
+  if(!(p.houseTypes||[]).length)h+=`<div class="empty">No house types yet.<br>Add a type (e.g. "Tipe 45"), then add paint lines with m² per color.</div>`;
   for(const ht of p.houseTypes||[]){const t=htTotals(ht);
     h+=`<div class="card" onclick="openHT('${ht.id}')"><div class="top"><div>
-      <div class="nm" style="font-size:15px">${esc(ht.name)} <span class="badge ${ht.variant==='hook'?'hook':'std'}">${ht.variant==='hook'?'Hook':'Standard'}</span></div>
-      <div class="meta">${ht.units||0} unit${ht.units!==1?'s':''} · ${(ht.surfaces||[]).length} surface${(ht.surfaces||[]).length!==1?'s':''}</div>
-      <div class="stat">Rp ${fmt(t.cost)}</div></div><div class="arrow">›</div></div></div>`;}
+      <div class="nm" style="font-size:15px">${esc(ht.name)} ${ht.variant==='hook'?'<span class="badge hook">Hook</span>':''}</div>
+      <div class="meta">${ht.units||0} unit${ht.units!==1?'s':''} · ${(ht.paints||[]).length} line${(ht.paints||[]).length!==1?'s':''}</div>
+      <div class="stat">Rp ${fmt(t.avg)}</div></div><div class="arrow">›</div></div></div>`;}
   if(Object.keys(paint).length){
-    h+=`<div class="section-label">Total paint to order</div><div class="card flat">`;
-    for(const k in paint)h+=`<div class="kv"><span class="k">${esc(k)}</span><span class="v">${fmt(paint[k].pails)} pails · Rp ${fmt(paint[k].cost)}</span></div>`;
+    h+=`<div class="section-label">Paint to order (by colour)</div><div class="card flat">`;
+    for(const k in paint)h+=`<div class="kv"><span class="k">${esc(k)}</span><span class="v">${f2(paint[k].packsAvg)} packs · Rp ${fmt(paint[k].costAvg)}</span></div>`;
     h+=`</div>`;}
   $('app').innerHTML=h;
   $('fab').innerHTML=`<button class="btn" onclick="openCust('${c.id}')">‹ Back</button><button class="btn gold" onclick="editHT()">+ House Type</button>`;
 }
-
 function renderHT(){
   const c=cust(view.custId),p=proj(c,view.projId),ht=(p.houseTypes||[]).find(h=>h.id===view.htId);if(!ht){view.level='project';return render();}
   setCrumb(`<a onclick="openCust('${c.id}')">${esc(c.name)}</a> › <a onclick="openProj('${p.id}')">${esc(p.name)}</a> › <b>${esc(ht.name)}</b>`,ht.name);
-  const t=htTotals(ht);const d=ht.dims||{};
+  const t=htTotals(ht);
   let h=`<div class="card flat">
-    <div class="kv"><span class="k">Variant</span><span class="v">${ht.variant==='hook'?`Hook (ext ×${DB.settings.hookMultiplier||1.4})`:'Standard'}</span></div>
+    <div class="kv"><span class="k">Variant</span><span class="v">${ht.variant==='hook'?'Hook':'Standard'}</span></div>
     <div class="kv"><span class="k">Units</span><span class="v">${ht.units||0}</span></div>
-    ${(d.L||d.W||d.H)?`<div class="kv"><span class="k">Dimensions</span><span class="v">${d.L||'?'} × ${d.W||'?'} × ${d.H||'?'} m (L×W×H)</span></div>`:''}
-    ${d.notes?`<div class="kv"><span class="k">Plan notes</span><span class="v" style="max-width:60%">${esc(d.notes)}</span></div>`:''}
+    ${ht.notes?`<div class="kv"><span class="k">Notes</span><span class="v" style="max-width:60%">${esc(ht.notes)}</span></div>`:''}
     <div class="btnrow" style="margin-top:10px"><button class="btn sm" onclick="editHT('${ht.id}')">Edit details</button><button class="btn sm" onclick="delHT('${ht.id}')" style="color:#991B1B">Delete</button></div></div>`;
-  // photo / plan
   h+=`<div class="section-label">Plan / photo</div>`;
   if(ht.photo)h+=`<img class="thumb" src="${ht.photo}" onclick="viewPhoto('${ht.id}')"><div class="btnrow"><button class="btn sm" onclick="addPhoto('${ht.id}')">Replace</button><button class="btn sm" onclick="rmPhoto('${ht.id}')" style="color:#991B1B">Remove</button></div>`;
   else h+=`<div class="empty" style="padding:1.4rem" onclick="addPhoto('${ht.id}')">Tap to add a photo or your drawn plan for this house type.</div>`;
-  // surfaces
-  h+=`<div class="section-label">Surfaces &amp; paint</div>`;
-  if(!DB.products.length)h+=`<div class="warn">No products yet — <b onclick="goProducts()" style="cursor:pointer;text-decoration:underline">add products</b> before adding surfaces.</div>`;
-  if(!(ht.surfaces||[]).length)h+=`<div class="empty">No surfaces yet. Add one (e.g. "Exterior walls") and pick the product.</div>`;
-  for(const sf of ht.surfaces||[]){const cc=surfaceCalc(ht,sf);const idx=ht.surfaces.indexOf(sf);
-    h+=`<div class="ht" style="margin-bottom:7px"><div class="surf" style="border:none;padding:0">
-      <div class="si"><div class="sl">${esc(sf.label||'Surface')} ${cc?`<span class="badge ${cc.pr.surface}">${cc.pr.surface}</span>`:''}</div>
-      <div class="sm2">${cc?`${esc(cc.pr.name)} · ${f1(sf.area)} m²${ht.variant==='hook'&&cc.pr.surface==='ext'?` ×${DB.settings.hookMultiplier}`:''} · ${cc.coats} coats`:'product missing'}</div></div>
-      <div class="del" onclick="event.stopPropagation();delSurf('${ht.id}',${idx})">✕</div></div>`;
-    if(cc)h+=`<div class="calcbox" style="margin-top:8px"><div class="kv" style="padding:3px 0"><span class="k">Paint / house</span><span class="v">${f1(cc.litersPerHouse)} L</span></div>
-      <div class="kv" style="padding:3px 0"><span class="k">Total (${ht.units||0} units)</span><span class="v">${f1(cc.totalLiters)} L → ${fmt(cc.pails)} pails</span></div>
-      <div class="kv" style="padding:3px 0"><span class="k">Cost</span><span class="ct">Rp ${fmt(cc.cost)}</span></div></div>`;
-    h+=`<div class="btnrow" style="margin-top:8px"><button class="btn sm" onclick="editSurf('${ht.id}',${idx})">Edit surface</button></div></div>`;}
-  h+=`<div style="margin-bottom:14px"><span class="miniadd" onclick="editSurf('${ht.id}')">+ add surface</span></div>`;
-  if(t.cost)h+=`<div class="card flat"><div class="kv"><span class="k" style="font-weight:600;color:var(--text)">House type total</span><span class="v" style="color:var(--green);font-family:var(--display);font-size:16px">Rp ${fmt(t.cost)}</span></div></div>`;
+  h+=`<div class="section-label">Paint — m² per colour</div>`;
+  if(!(ht.paints||[]).length)h+=`<div class="empty">No paint lines yet. Add each colour with its m². The tool converts to litres, packs, and price.</div>`;
+  else{for(const pl of ht.paints){const cc=lineCalc(pl);const idx=ht.paints.indexOf(pl);if(!cc)continue;
+    h+=`<div class="card flat" style="margin-bottom:7px"><div class="pline" style="border:none;padding:0">
+      <div class="ph"><span class="sw" style="background:${pl.colorHex||'#e5e0d8'}"></span>
+        <div class="pi"><div class="pn">${esc(cc.ci.product)} <span class="badge cat">${sizeLabel(cc.ci.size)}</span></div>
+        <div class="pm">${pl.color?esc(pl.color)+' · ':''}${f2(cc.sqm)} m² · ${cc.coats} coat${cc.coats>1?'s':''}</div></div>
+        <div class="acts"><span onclick="editPaint('${ht.id}',${idx})">✎</span><span onclick="delPaint('${ht.id}',${idx})">✕</span></div></div>
+      <div class="calcline"><div class="cmain"><span>${f2(cc.litersAvg)} L → ${f2(cc.packsAvg)} packs</span><span class="cm">Rp ${fmt(cc.costAvg)}</span></div>
+      <div class="crange">range ${f2(cc.litersLow)}–${f2(cc.litersHigh)} L · Rp ${fmt(cc.costLow)}–${fmt(cc.costHigh)}</div></div>
+    </div></div>`;}}
+  h+=`<div><span class="miniadd" onclick="editPaint('${ht.id}')">+ add paint line</span></div>`;
+  if(t.avg)h+=`<div class="card flat" style="margin-top:14px"><div class="kv"><span class="k" style="font-weight:600;color:var(--text)">House type total (avg)</span><span class="v" style="color:var(--green);font-family:var(--display);font-size:16px">Rp ${fmt(t.avg)}</span></div><div class="kv"><span class="k">Range</span><span class="v" style="font-size:12px;color:var(--muted)">Rp ${fmt(t.low)} – ${fmt(t.high)}</span></div></div>`;
   $('app').innerHTML=h;
-  $('fab').innerHTML=`<button class="btn" onclick="openProj('${p.id}')">‹ Back</button><button class="btn gold" onclick="editSurf('${ht.id}')">+ Surface</button>`;
+  $('fab').innerHTML=`<button class="btn" onclick="openProj('${p.id}')">‹ Back</button><button class="btn gold" onclick="editPaint('${ht.id}')">+ Paint line</button>`;
 }
 
 /* ---------- NAV ---------- */
@@ -278,27 +272,13 @@ function openSheet(html){$('sheet').innerHTML=html;$('modal').classList.add('on'
 window.closeSheet=()=>$('modal').classList.remove('on');
 $('modal').onclick=e=>{if(e.target===$('modal'))closeSheet();};
 
-window.editHook=()=>openSheet(`<h2>Hook exterior multiplier</h2>
-  <div class="field"><label>Multiplier on exterior area for hook units</label><input id="f_hk" type="number" step="0.05" value="${DB.settings.hookMultiplier||1.4}"><div class="hint">Corner/hook houses have more exterior wall. 1.4 = 40% more exterior paint than a standard unit.</div></div>
-  <div class="btnrow"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn gold" style="flex:1" onclick="saveHook()">Save</button></div>`);
-window.saveHook=()=>{DB.settings.hookMultiplier=parseFloat($('f_hk').value)||1.4;closeSheet();render();};
-
-window.editProduct=(id)=>{const p=id?prod(id):null;
-  openSheet(`<h2>${p?'Edit':'New'} product</h2>
-    <div class="field"><label>Product name</label><input id="p_name" value="${p?esc(p.name):''}" placeholder="e.g. Jotashield Ultra Clean"></div>
-    <div class="field"><label>Surface</label><div class="seg"><button id="ps_ext" class="${!p||p.surface==='ext'?'on':''}" onclick="pSurf('ext')">Exterior</button><button id="ps_int" class="${p&&p.surface==='int'?'on':''}" onclick="pSurf('int')">Interior</button></div></div>
-    <div class="row3"><div class="field"><label>Spread m²/L</label><input id="p_rate" type="number" step="0.1" value="${p?p.spreadRate:''}" placeholder="7"></div>
-    <div class="field"><label>Pack size L</label><input id="p_pack" type="number" step="0.1" value="${p?p.packSize:''}" placeholder="20"></div>
-    <div class="field"><label>Coats</label><input id="p_coats" type="number" value="${p?p.coats||2:2}"></div></div>
-    <div class="field"><label>Price per pail (Rp)</label><input id="p_price" type="number" value="${p?p.price:''}" placeholder="your selling price per pail"></div>
-    <input type="hidden" id="p_surf" value="${p?p.surface:'ext'}">
-    <div class="btnrow"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn gold" style="flex:1" onclick="saveProduct('${id||''}')">Save</button></div>
-    ${p?`<button class="del-btn" onclick="delProduct('${id}')">Delete product</button>`:''}`);};
-window.pSurf=s=>{$('p_surf').value=s;$('ps_ext').classList.toggle('on',s==='ext');$('ps_int').classList.toggle('on',s==='int');};
-window.saveProduct=id=>{const name=$('p_name').value.trim();if(!name){$('p_name').focus();return;}
-  const data={name,surface:$('p_surf').value,spreadRate:parseFloat($('p_rate').value)||0,packSize:parseFloat($('p_pack').value)||0,coats:parseInt($('p_coats').value)||2,price:parseInt($('p_price').value)||0};
-  if(id)Object.assign(prod(id),data);else DB.products.push({id:uid(),...data});closeSheet();render();};
-window.delProduct=id=>{if(confirm('Delete this product? Surfaces using it will lose their calculation.')){DB.products=DB.products.filter(p=>p.id!==id);closeSheet();render();}};
+window.editPrice=(code)=>{const it=catItem(code);
+  openSheet(`<h2>${esc(it.product)}</h2>
+    <div class="field"><label>${sizeLabel(it.size)} · ${it.category} · ${it.covMin}–${it.covMax} m²/L</label><input id="pr_v" type="number" value="${basePrice(code)}"></div>
+    <div class="hint" style="margin-bottom:10px">TDS list price: Rp ${fmt(it.price)}${DB.prices[code]!=null?' (you have edited this)':''}</div>
+    <div class="btnrow"><button class="btn" onclick="closeSheet()">Cancel</button>${DB.prices[code]!=null?`<button class="btn sm" onclick="resetPrice('${code}')">Reset</button>`:''}<button class="btn gold" style="flex:1" onclick="savePrice('${code}')">Save</button></div>`);};
+window.savePrice=code=>{DB.prices[code]=parseInt($('pr_v').value)||catItem(code).price;closeSheet();render();};
+window.resetPrice=code=>{delete DB.prices[code];closeSheet();render();};
 
 window.editCust=(id)=>{const c=id?cust(id):null;
   openSheet(`<h2>${c?'Edit':'New'} customer</h2>
@@ -306,7 +286,7 @@ window.editCust=(id)=>{const c=id?cust(id):null;
     <div class="field"><label>Type</label><select id="f_ctype">${['Contractor','Developer','Direct','Reseller','Other'].map(t=>`<option ${c&&c.custType===t?'selected':''}>${t}</option>`).join('')}</select></div>
     <div class="row2"><div class="field"><label>Contact <span class="opt">optional</span></label><input id="f_contact" value="${c?esc(c.contact||''):''}"></div>
     <div class="field"><label>Phone <span class="opt">optional</span></label><input id="f_phone" value="${c?esc(c.phone||''):''}"></div></div>
-    <div class="field"><label>Location <span class="opt">optional</span></label><input id="f_loc" value="${c?esc(c.location||''):''}" placeholder="e.g. Batam Centre"></div>
+    <div class="field"><label>Location <span class="opt">optional</span></label><input id="f_loc" value="${c?esc(c.location||''):''}"></div>
     <div class="btnrow"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn gold" style="flex:1" onclick="saveCust('${id||''}')">Save</button></div>
     ${c?`<button class="del-btn" onclick="delCust('${id}')">Delete customer</button>`:''}`);};
 window.saveCust=id=>{const name=$('f_name').value.trim();if(!name){$('f_name').focus();return;}
@@ -328,56 +308,88 @@ window.saveProj=id=>{const c=cust(view.custId),name=$('f_pname').value.trim();if
   if(id)Object.assign(proj(c,id),data);else c.projects.push({id:uid(),...data,houseTypes:[]});closeSheet();render();};
 window.delProj=id=>{if(confirm('Delete this project?')){const c=cust(view.custId);c.projects=c.projects.filter(p=>p.id!==id);closeSheet();openCust(c.id);}};
 
-window.editHT=(id)=>{const c=cust(view.custId),p=proj(c,view.projId),ht=id?(p.houseTypes||[]).find(h=>h.id===id):null;const d=ht&&ht.dims||{};
+window.editHT=(id)=>{const c=cust(view.custId),p=proj(c,view.projId),ht=id?(p.houseTypes||[]).find(h=>h.id===id):null;
   openSheet(`<h2>${ht?'Edit':'New'} house type</h2>
-    <div class="field"><label>Type name</label><input id="h_name" value="${ht?esc(ht.name):''}" placeholder="e.g. Tipe 45"></div>
-    <div class="field"><label>Variant</label><div class="seg"><button id="hv_std" class="${!ht||ht.variant!=='hook'?'on':''}" onclick="hVar('standard')">Standard</button><button id="hv_hook" class="${ht&&ht.variant==='hook'?'on':''}" onclick="hVar('hook')">Hook</button></div><div class="hint">Hook units multiply exterior paint by ×${DB.settings.hookMultiplier||1.4} (set in Products).</div></div>
+    <div class="field"><label>Type name</label><input id="h_name" value="${ht?esc(ht.name):''}" placeholder="e.g. Tipe 45 / Tipe 45 Hook"></div>
+    <div class="field"><label>Hook unit? <span class="opt">optional label</span></label><div class="seg"><button id="hv_std" class="${!ht||ht.variant!=='hook'?'on':''}" onclick="hVar('standard')">Standard</button><button id="hv_hook" class="${ht&&ht.variant==='hook'?'on':''}" onclick="hVar('hook')">Hook</button></div></div>
     <input type="hidden" id="h_var" value="${ht?ht.variant||'standard':'standard'}">
     <div class="field"><label>Number of units</label><input id="h_units" type="number" value="${ht?ht.units||'':''}" placeholder="e.g. 24"></div>
-    <div class="section-label" style="margin:6px 0">Dimensions <span class="opt">optional — used to auto-fill surface area</span></div>
-    <div class="row3"><div class="field"><label>Length m</label><input id="h_L" type="number" step="0.1" value="${d.L||''}"></div>
-    <div class="field"><label>Width m</label><input id="h_W" type="number" step="0.1" value="${d.W||''}"></div>
-    <div class="field"><label>Wall ht m</label><input id="h_H" type="number" step="0.1" value="${d.H||''}"></div></div>
-    <div class="field"><label>Plan notes <span class="opt">optional — rooms, terrace, balcony…</span></label><textarea id="h_notes" placeholder="e.g. 2 bedrooms, front terrace 2×3, rear balcony">${d.notes?esc(d.notes):''}</textarea></div>
+    <div class="field"><label>Notes <span class="opt">optional — rooms, terrace, dimensions for reference</span></label><textarea id="h_notes">${ht&&ht.notes?esc(ht.notes):''}</textarea></div>
     <div class="btnrow"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn gold" style="flex:1" onclick="saveHT('${id||''}')">Save</button></div>`);};
 window.hVar=v=>{$('h_var').value=v;$('hv_std').classList.toggle('on',v!=='hook');$('hv_hook').classList.toggle('on',v==='hook');};
 window.saveHT=id=>{const c=cust(view.custId),p=proj(c,view.projId),name=$('h_name').value.trim();if(!name){$('h_name').focus();return;}
-  const dims={L:parseFloat($('h_L').value)||0,W:parseFloat($('h_W').value)||0,H:parseFloat($('h_H').value)||0,notes:$('h_notes').value.trim()};
-  const data={name,variant:$('h_var').value,units:parseInt($('h_units').value)||0,dims};
+  const data={name,variant:$('h_var').value,units:parseInt($('h_units').value)||0,notes:$('h_notes').value.trim()};
   if(!p.houseTypes)p.houseTypes=[];
-  if(id)Object.assign(p.houseTypes.find(h=>h.id===id),data);else p.houseTypes.push({id:uid(),...data,surfaces:[],photo:null});
+  if(id)Object.assign(p.houseTypes.find(h=>h.id===id),data);else p.houseTypes.push({id:uid(),...data,paints:[],photo:null});
   closeSheet();render();};
 window.delHT=id=>{if(confirm('Delete this house type?')){const c=cust(view.custId),p=proj(c,view.projId);p.houseTypes=p.houseTypes.filter(h=>h.id!==id);view.level='project';render();}};
 
-window.editSurf=(htId,idx)=>{const c=cust(view.custId),p=proj(c,view.projId),ht=p.houseTypes.find(h=>h.id===htId);
-  const sf=(idx!==undefined&&idx!==null)?ht.surfaces[idx]:null;const d=ht.dims||{};
-  if(!DB.products.length){closeSheet();goProducts();return;}
-  const opts=DB.products.map(pr=>`<option value="${pr.id}" ${sf&&sf.productId===pr.id?'selected':''}>${esc(pr.name)} (${pr.surface})</option>`).join('');
-  let helper='';
-  if(d.L&&d.W&&d.H)helper=`<div class="dimcalc">From dimensions: <b onclick="fillArea(${(2*(d.L+d.W)*d.H).toFixed(1)})">exterior walls ≈ ${f1(2*(d.L+d.W)*d.H)} m²</b> · <b onclick="fillArea(${(d.L*d.W).toFixed(1)})">ceiling ≈ ${f1(d.L*d.W)} m²</b></div>`;
-  openSheet(`<h2>${sf?'Edit':'New'} surface</h2>
-    <div class="field"><label>Label</label><input id="s_label" value="${sf?esc(sf.label):''}" placeholder="e.g. Exterior walls / Interior / Ceiling"></div>
-    <div class="field"><label>Product</label><select id="s_prod">${opts}</select></div>
-    <div class="field"><label>Area per house (m²)</label><input id="s_area" type="number" step="0.1" value="${sf?sf.area:''}" placeholder="paintable area of one house">${helper}</div>
-    <div class="field"><label>Coats <span class="opt">optional — defaults to product's</span></label><input id="s_coats" type="number" value="${sf&&sf.coats?sf.coats:''}" placeholder="default"></div>
-    <div class="btnrow"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn gold" style="flex:1" onclick="saveSurf('${htId}',${idx===undefined?'null':idx})">Save</button></div>`);};
-window.fillArea=v=>{$('s_area').value=v;};
-window.saveSurf=(htId,idx)=>{const c=cust(view.custId),p=proj(c,view.projId),ht=p.houseTypes.find(h=>h.id===htId);
-  const label=$('s_label').value.trim()||'Surface';
-  const data={label,productId:$('s_prod').value,area:parseFloat($('s_area').value)||0,coats:parseInt($('s_coats').value)||0};
-  if(!ht.surfaces)ht.surfaces=[];
-  if(idx!==null&&idx!==undefined)Object.assign(ht.surfaces[idx],data);else ht.surfaces.push(data);
+/* ---------- PAINT LINE: cascade + live calc ---------- */
+let plDraft={cat:'Exterior',product:'',code:'',color:'',colorHex:'#e5e0d8',sqm:'',price:null};
+window.editPaint=(htId,idx)=>{const c=cust(view.custId),p=proj(c,view.projId),ht=p.houseTypes.find(h=>h.id===htId);
+  const pl=(idx!==undefined&&idx!==null)?ht.paints[idx]:null;
+  if(pl){const ci=catItem(pl.code);plDraft={cat:ci.category,product:ci.product,code:pl.code,color:pl.color||'',colorHex:pl.colorHex||'#e5e0d8',sqm:pl.sqm||'',price:pl.price};}
+  else plDraft={cat:'Exterior',product:prodsIn('Exterior')[0],code:'',color:'',colorHex:'#e5e0d8',sqm:'',price:null};
+  if(!plDraft.code){const sz=sizesOf(plDraft.cat,plDraft.product);plDraft.code=sz[0].code;plDraft.price=basePrice(sz[0].code);}
+  renderPaintSheet(htId,idx);};
+function renderPaintSheet(htId,idx){
+  const d=plDraft;
+  const catOpts=CATS.map(ct=>`<option ${d.cat===ct?'selected':''}>${ct}</option>`).join('');
+  const prodOpts=prodsIn(d.cat).map(pr=>`<option ${d.product===pr?'selected':''}>${esc(pr)}</option>`).join('');
+  const sizeOpts=sizesOf(d.cat,d.product).map(it=>`<option value="${it.code}" ${d.code===it.code?'selected':''}>${sizeLabel(it.size)} — Rp ${fmt(basePrice(it.code))}</option>`).join('');
+  const ci=catItem(d.code);
+  const cov=ci?`<div class="cov">Coverage ${ci.covMin}–${ci.covMax} m²/L per coat · ${coatsFor(ci.category)} coat${coatsFor(ci.category)>1?'s':''} (TDS)</div>`:'';
+  let live='';
+  if(ci&&d.sqm){const c=lineCalc({code:d.code,sqm:parseFloat(d.sqm)||0,price:d.price});
+    live=`<div class="livecalc"><div class="lc head"><span>Paint needed (avg)</span><span class="v">${f2(c.litersAvg)} L</span></div>
+      <div class="lc"><span>Packs (${sizeLabel(ci.size)})</span><span class="v">${f2(c.packsAvg)}</span></div>
+      <div class="lc head"><span>Cost (avg)</span><span class="v">Rp ${fmt(c.costAvg)}</span></div>
+      <div class="lc"><span style="color:var(--muted);font-size:11px">Range (lean–safe)</span><span class="v" style="font-size:11px;color:var(--muted)">Rp ${fmt(c.costLow)} – ${fmt(c.costHigh)}</span></div></div>`;}
+  openSheet(`<h2>${idx!=null&&idx!==undefined?'Edit':'New'} paint line</h2>
+    <div class="field"><label>Category</label><select id="d_cat" onchange="plCat(this.value)">${catOpts}</select></div>
+    <div class="field"><label>Product</label><select id="d_prod" onchange="plProd(this.value)">${prodOpts}</select></div>
+    <div class="field"><label>Size</label><select id="d_size" onchange="plSize(this.value)">${sizeOpts}</select>${cov}</div>
+    <div class="row2"><div class="field"><label>Colour <span class="opt">label</span></label><input id="d_color" value="${esc(d.color)}" oninput="plField('color',this.value)" placeholder="e.g. 1624 White"></div>
+    <div class="field"><label>Swatch</label><input id="d_hex" type="color" value="${d.colorHex}" oninput="plField('colorHex',this.value)" style="height:44px;padding:4px"></div></div>
+    <div class="field"><label>Area for this colour (m²)</label><input id="d_sqm" type="number" step="0.01" value="${d.sqm}" oninput="plSqm(this.value)" placeholder="m² this colour covers"></div>
+    <div class="field"><label>Price per ${ci?sizeLabel(ci.size):'pack'} (Rp) <span class="opt">prefilled — edit for tinted colours</span></label><input id="d_price" type="number" value="${d.price!=null?d.price:''}" oninput="plField('price',this.value===''?null:parseInt(this.value))"></div>
+    <div id="d_live">${live}</div>
+    <div class="btnrow"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn gold" style="flex:1" onclick="savePaint('${htId}',${idx==null?'null':idx})">Save</button></div>`);}
+function refreshLive(){const d=plDraft,ci=catItem(d.code);const box=$('d_live');if(!box)return;
+  if(ci&&d.sqm){const c=lineCalc({code:d.code,sqm:parseFloat(d.sqm)||0,price:d.price});
+    box.innerHTML=`<div class="livecalc"><div class="lc head"><span>Paint needed (avg)</span><span class="v">${f2(c.litersAvg)} L</span></div>
+      <div class="lc"><span>Packs (${sizeLabel(ci.size)})</span><span class="v">${f2(c.packsAvg)}</span></div>
+      <div class="lc head"><span>Cost (avg)</span><span class="v">Rp ${fmt(c.costAvg)}</span></div>
+      <div class="lc"><span style="color:var(--muted);font-size:11px">Range (lean–safe)</span><span class="v" style="font-size:11px;color:var(--muted)">Rp ${fmt(c.costLow)} – ${fmt(c.costHigh)}</span></div></div>`;}
+  else box.innerHTML='';}
+window.plCat=v=>{plDraft.cat=v;plDraft.product=prodsIn(v)[0];const sz=sizesOf(v,plDraft.product);plDraft.code=sz[0].code;plDraft.price=basePrice(sz[0].code);
+  // rerender selects that depend on category
+  const d=plDraft;$('d_prod').innerHTML=prodsIn(d.cat).map(pr=>`<option ${d.product===pr?'selected':''}>${esc(pr)}</option>`).join('');
+  plProd(d.product);};
+window.plProd=v=>{plDraft.product=v;const sz=sizesOf(plDraft.cat,v);plDraft.code=sz[0].code;plDraft.price=basePrice(sz[0].code);
+  const d=plDraft;$('d_size').innerHTML=sz.map(it=>`<option value="${it.code}" ${d.code===it.code?'selected':''}>${sizeLabel(it.size)} — Rp ${fmt(basePrice(it.code))}</option>`).join('');
+  plSize(d.code);};
+window.plSize=v=>{plDraft.code=v;plDraft.price=basePrice(v);if($('d_price'))$('d_price').value=plDraft.price;
+  const ci=catItem(v);// refresh coverage note + price label by re-rendering minimal
+  const covEl=document.querySelector('.cov');if(covEl&&ci)covEl.textContent=`Coverage ${ci.covMin}–${ci.covMax} m²/L per coat · ${coatsFor(ci.category)} coat${coatsFor(ci.category)>1?'s':''} (TDS)`;
+  refreshLive();};
+window.plField=(k,v)=>{plDraft[k]=v;if(k==='price')refreshLive();};
+window.plSqm=v=>{plDraft.sqm=v;refreshLive();};
+window.savePaint=(htId,idx)=>{const c=cust(view.custId),p=proj(c,view.projId),ht=p.houseTypes.find(h=>h.id===htId);const d=plDraft;
+  if(!d.sqm||!(parseFloat(d.sqm)>0)){$('d_sqm').focus();return;}
+  const data={code:d.code,color:d.color.trim(),colorHex:d.colorHex,sqm:parseFloat(d.sqm),price:d.price};
+  if(!ht.paints)ht.paints=[];
+  if(idx!=null&&idx!==undefined)Object.assign(ht.paints[idx],data);else ht.paints.push(data);
   closeSheet();render();};
-window.delSurf=(htId,idx)=>{const c=cust(view.custId),p=proj(c,view.projId),ht=p.houseTypes.find(h=>h.id===htId);ht.surfaces.splice(idx,1);render();};
+window.delPaint=(htId,idx)=>{const c=cust(view.custId),p=proj(c,view.projId),ht=p.houseTypes.find(h=>h.id===htId);ht.paints.splice(idx,1);render();};
 
-/* ---------- PHOTO (compressed) ---------- */
+/* ---------- PHOTO ---------- */
 window.addPhoto=htId=>{const i=document.createElement('input');i.type='file';i.accept='image/*';
   i.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
-    r.onload=()=>{const img=new Image();img.onload=()=>{
-      const max=900;let w=img.width,h=img.height;if(w>h&&w>max){h=h*max/w;w=max;}else if(h>max){w=w*max/h;h=max;}
+    r.onload=()=>{const img=new Image();img.onload=()=>{const max=900;let w=img.width,h=img.height;
+      if(w>h&&w>max){h=h*max/w;w=max;}else if(h>max){w=w*max/h;h=max;}
       const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);
-      const data=cv.toDataURL('image/jpeg',0.55);
-      const c=cust(view.custId),p=proj(c,view.projId),ht=p.houseTypes.find(x=>x.id===htId);ht.photo=data;render();
+      const c=cust(view.custId),p=proj(c,view.projId),ht=p.houseTypes.find(x=>x.id===htId);ht.photo=cv.toDataURL('image/jpeg',0.55);render();
     };img.src=r.result;};r.readAsDataURL(f);};i.click();};
 window.rmPhoto=htId=>{const c=cust(view.custId),p=proj(c,view.projId),ht=p.houseTypes.find(x=>x.id===htId);ht.photo=null;render();};
 window.viewPhoto=htId=>{const c=cust(view.custId),p=proj(c,view.projId),ht=p.houseTypes.find(x=>x.id===htId);
@@ -386,22 +398,19 @@ window.viewPhoto=htId=>{const c=cust(view.custId),p=proj(c,view.projId),ht=p.hou
 /* ---------- EXPORT ---------- */
 function csvCell(s){s=(s==null?'':''+s);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
 window.exportCSV=()=>{
-  const rows=[['Customer','Type','Contact','Phone','Cust Location','Project','Proj Location','Date Won','Status','House Type','Variant','Units','Surface','Product','Surface Type','Area/house m2','Coats','L/house','Total L','Pails','Price/pail','Line Cost']];
-  for(const c of DB.customers)for(const p of c.projects){
-    const pb=[c.name,c.custType,c.contact,c.phone,c.location,p.name,p.location,p.dateWon,p.status];
-    if(!(p.houseTypes||[]).length){rows.push([...pb,'','','','','','','','','','','','']);continue;}
-    for(const ht of p.houseTypes){
-      const hb=[...pb,ht.name,ht.variant,ht.units];
-      if(!(ht.surfaces||[]).length){rows.push([...hb,'','','','','','','','','']);continue;}
-      for(const sf of ht.surfaces){const cc=surfaceCalc(ht,sf);
-        rows.push([...hb,sf.label,cc?cc.pr.name:'',cc?cc.pr.surface:'',cc?cc.area:sf.area,cc?cc.coats:'',cc?f1(cc.litersPerHouse):'',cc?f1(cc.totalLiters):'',cc?cc.pails:'',cc?cc.pr.price:'',cc?cc.cost:'']);}
-    }
-  }
+  const rows=[['Customer','Type','Contact','Phone','Cust Location','Project','Proj Location','Date Won','Status','House Type','Variant','Units','Category','Product','Size','Colour','m2','Coats','Litres avg','Packs avg','Price/pack','Cost avg','Cost low','Cost high']];
+  for(const c of DB.customers)for(const p of c.projects){const pb=[c.name,c.custType,c.contact,c.phone,c.location,p.name,p.location,p.dateWon,p.status];
+    if(!(p.houseTypes||[]).length){rows.push([...pb,...Array(15).fill('')]);continue;}
+    for(const ht of p.houseTypes){const hb=[...pb,ht.name,ht.variant,ht.units];
+      if(!(ht.paints||[]).length){rows.push([...hb,...Array(12).fill('')]);continue;}
+      for(const pl of ht.paints){const cc=lineCalc(pl);if(!cc){continue;}
+        rows.push([...hb,cc.ci.category,cc.ci.product,sizeLabel(cc.ci.size),pl.color,cc.sqm,cc.coats,cc.litersAvg.toFixed(2),cc.packsAvg.toFixed(2),cc.price,Math.round(cc.costAvg),Math.round(cc.costLow),Math.round(cc.costHigh)]);}
+    }}
   const csv=rows.map(r=>r.map(csvCell).join(',')).join('\n');
   const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='project-records-'+new Date().toISOString().slice(0,10)+'.csv';a.click();};
 window.exportJSON=()=>{const blob=new Blob([JSON.stringify(DB)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='project-records-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();};
-window.importJSON=()=>{const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{DB=JSON.parse(r.result);if(!DB.products)DB.products=[];if(!DB.settings)DB.settings={hookMultiplier:1.4};save();goCustomers();}catch(x){alert('Bad file');}};r.readAsText(f);};i.click();};
+window.importJSON=()=>{const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{DB=JSON.parse(r.result);if(!DB.prices)DB.prices={};save();goCustomers();}catch(x){alert('Bad file');}};r.readAsText(f);};i.click();};
 
 render();
 </script>
