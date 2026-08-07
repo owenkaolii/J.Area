@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backup &amp; Restore — Jotun Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#F5F3EE;--surface:#FFF;--border:#E2DDD4;--border2:#C8C3B8;--text:#1A1814;--muted:#7A756C;--input:#FAFAF7;--green:#166534;--greenbg:#F0FDF4;--greenbd:#CDE9D5;--amber:#92400E;--amberbg:#FFFBEB;--amberbd:#F0E0C0;--blue:#1E4E8C;--bluebg:#EFF5FC;--red:#991B1B;--redbg:#FEF2F2;--redbd:#F5D0D0;--font:'DM Sans',sans-serif;--display:'Space Grotesk',sans-serif;--mono:'JetBrains Mono',monospace}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.55;max-width:680px;margin:0 auto;padding:1.1rem 1rem 4rem;font-size:15px}
+header{background:var(--text);margin:-1.1rem -1rem 1.3rem;padding:1.1rem 1.2rem 1.2rem;color:#fff}
+.home-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px 6px 10px;margin-bottom:11px;background:rgba(255,255,255,.07);border:.5px solid rgba(255,255,255,.14);border-radius:8px;color:rgba(255,255,255,.65);font-size:11px;font-weight:600;text-decoration:none}
+.home-btn:hover{background:rgba(255,255,255,.14);color:#fff}.home-btn svg{width:13px;height:13px}
+h1{font-family:var(--display);font-size:22px;font-weight:600}
+.sub{font-size:13px;color:rgba(255,255,255,.62);margin-top:3px}
+.card{background:var(--surface);border:.5px solid var(--border2);border-radius:12px;padding:1rem 1.05rem;margin-bottom:1rem}
+.card h2{font-family:var(--display);font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:11px}
+.tool{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:.5px solid var(--border)}
+.tool:first-of-type{border-top:none}
+.tool .ic{width:32px;height:32px;border-radius:8px;background:var(--input);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.tool .info{flex:1;min-width:0}
+.tool .nm{font-weight:600;font-size:14px}
+.tool .dt{font-size:11.5px;color:var(--muted);font-family:var(--mono);margin-top:1px}
+.tool .sz{font-family:var(--display);font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+.tool.empty .nm,.tool.empty .sz{color:var(--border2)}
+.total{display:flex;justify-content:space-between;align-items:baseline;padding-top:11px;margin-top:4px;border-top:1px solid var(--border2)}
+.total .l{font-weight:600;font-size:13px}
+.total .v{font-family:var(--display);font-size:16px;font-weight:600;color:var(--green)}
+.btn{font-family:var(--display);font-weight:600;font-size:14px;padding:12px 16px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);cursor:pointer;width:100%}
+.btn.gold{background:var(--text);color:#fff;border-color:var(--text)}
+.btn.danger{background:var(--redbg);color:var(--red);border-color:var(--redbd)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btnrow{display:flex;gap:8px;margin-top:11px}
+.note{font-size:12.5px;line-height:1.55;border-radius:9px;padding:10px 12px;margin-top:11px}
+.note.g{background:var(--greenbg);border:.5px solid var(--greenbd);color:var(--green)}
+.note.a{background:var(--amberbg);border:.5px solid var(--amberbd);color:var(--amber)}
+.note.b{background:var(--bluebg);border:.5px solid #CFE0F0;color:var(--blue)}
+.note b{font-weight:700}
+.status{font-size:13px;text-align:center;margin-top:10px;min-height:18px;font-weight:500}
+.status.ok{color:var(--green)}.status.err{color:var(--red)}
+.drop{border:1.5px dashed var(--border2);border-radius:11px;padding:1.5rem 1rem;text-align:center;cursor:pointer;background:var(--input);transition:all .15s}
+.drop:hover,.drop.over{border-color:var(--green);background:var(--greenbg)}
+.drop .big{font-family:var(--display);font-weight:600;font-size:14px}
+.drop .small{font-size:12px;color:var(--muted);margin-top:3px}
+.preview{margin-top:12px;border:.5px solid var(--border2);border-radius:10px;overflow:hidden}
+.preview .ph{background:var(--input);padding:9px 12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-family:var(--display)}
+.prow{display:flex;align-items:center;gap:9px;padding:9px 12px;border-top:.5px solid var(--border);font-size:13px}
+.prow input{width:16px;height:16px;accent-color:var(--green);flex-shrink:0}
+.prow .pn{flex:1;min-width:0}
+.prow .pd{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.prow .tag{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:20px;letter-spacing:.03em}
+.tag.new{background:var(--greenbg);color:var(--green)}
+.tag.over{background:var(--amberbg);color:var(--amber)}
+</style>
+</head>
+<body>
+<header>
+  <a class="home-btn" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>Tools</a>
+  <h1>Backup &amp; Restore</h1>
+  <div class="sub">One file holding every tool&#8217;s data &#183; keep it somewhere safe</div>
+</header>
+
+<div id="origin-warn"></div>
+
+<div class="card">
+  <h2>Data on this device</h2>
+  <div id="tool-list"></div>
+  <div class="total"><span class="l">Total</span><span class="v" id="total-size">&mdash;</span></div>
+  <button class="btn gold" style="margin-top:12px" onclick="doExport()" id="exp-btn">Download Backup File</button>
+  <div class="status" id="exp-status"></div>
+  <div class="note b">Your tools save data inside this browser only. A backup file is the one thing that survives clearing the browser, changing phone, or reinstalling the laptop.</div>
+</div>
+
+<div class="card">
+  <h2>Restore from a backup</h2>
+  <div class="drop" id="drop">
+    <div class="big">Choose or drop a backup file</div>
+    <div class="small">The .json file you downloaded earlier</div>
+  </div>
+  <input type="file" id="file" accept=".json,application/json" style="display:none">
+  <div id="restore-area"></div>
+  <div class="status" id="imp-status"></div>
+</div>
+
+<div class="card">
+  <h2>Habit</h2>
+  <div class="note a"><b>Back up after every survey day and every tint-log session.</b> Download the file and put it where it will still exist in a year &#8212; Google Drive, email it to yourself, or a folder you already back up. A backup sitting only in Downloads is not a backup.</div>
+</div>
+
+<script>
+"use strict";
+var KNOWN={
+  "msr4":{n:"Moisture Survey",i:"\uD83D\uDCA7",c:function(d){try{var o=JSON.parse(d);var p=(o.projects||[]).length;var u=0;(o.projects||[]).forEach(function(pr){(pr.types||[]).forEach(function(t){(t.visits||[]).forEach(function(v){u+=(v.units||[]).length})})});return p+" project"+(p!==1?"s":"")+" \u00b7 "+u+" unit"+(u!==1?"s":"")}catch(e){return""}}},
+  "jproj_v4":{n:"Project Records",i:"\uD83C\uDFD7\uFE0F",c:function(d){try{var o=JSON.parse(d);var c=(o.customers||[]).length;var p=0;(o.customers||[]).forEach(function(x){p+=(x.projects||[]).length});return c+" customer"+(c!==1?"s":"")+" \u00b7 "+p+" project"+(p!==1?"s":"")}catch(e){return""}}},
+  "jtint_v1":{n:"Tint Log",i:"\uD83C\uDFA8",c:function(d){try{var o=JSON.parse(d);var n=(o.entries||[]).length;return n+" entr"+(n!==1?"ies":"y")}catch(e){return""}}},
+  "mc2_state":{n:"Moisture Check (old)",i:"\uD83D\uDCA6",c:function(){return"earlier version"}},
+  "pos_products":{n:"Kasir POS \u2014 products",i:"\uD83D\uDED2",c:function(d){try{return JSON.parse(d).length+" items"}catch(e){return""}}},
+  "pos_sales":{n:"Kasir POS \u2014 sales",i:"\uD83D\uDED2",c:function(d){try{return JSON.parse(d).length+" sales"}catch(e){return""}}},
+  "pos_counter":{n:"Kasir POS \u2014 counter",i:"\uD83D\uDED2",c:function(){return""}},
+  "tll_save":{n:"The Time-Lost Ledger",i:"\uD83C\uDFB2",c:function(){return"game save"}}
+};
+var $=function(id){return document.getElementById(id)};
+function fmtSize(b){if(b<1024)return b+" B";if(b<1024*1024)return (b/1024).toFixed(1)+" KB";return (b/1048576).toFixed(2)+" MB"}
+function scan(){var out=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);var v=localStorage.getItem(k);out.push({key:k,size:(k.length+v.length)*2,val:v})}return out.sort(function(a,b){var ka=KNOWN[a.key]?0:1,kb=KNOWN[b.key]?0:1;if(ka!==kb)return ka-kb;return b.size-a.size})}
+function renderList(){
+  var items=scan();var c=$("tool-list");var total=0;
+  if(!items.length){c.innerHTML='<div style="text-align:center;padding:22px 10px;color:var(--muted);font-size:13px">No saved data found in this browser.<br><span style="font-size:11.5px">If your tools do have data, see the note above about opening this page from the same address.</span></div>';$("total-size").textContent="0 B";$("exp-btn").disabled=true;return}
+  var html="";
+  items.forEach(function(it){
+    total+=it.size;
+    var meta=KNOWN[it.key];
+    var name=meta?meta.n:it.key;
+    var icon=meta?meta.i:"\uD83D\uDCE6";
+    var det="";
+    if(meta&&meta.c){try{det=meta.c(it.val)}catch(e){det=""}}
+    html+='<div class="tool"><div class="ic">'+icon+'</div><div class="info"><div class="nm">'+name+'</div><div class="dt">'+(det||it.key)+'</div></div><div class="sz">'+fmtSize(it.size)+'</div></div>';
+  });
+  c.innerHTML=html;
+  $("total-size").textContent=fmtSize(total);
+  $("exp-btn").disabled=false;
+}
+function doExport(){
+  var items=scan();
+  if(!items.length){return}
+  var data={};items.forEach(function(it){data[it.key]=it.val});
+  var payload={format:"jotun-tools-backup",version:1,created:new Date().toISOString(),origin:location.origin+location.pathname.replace(/[^/]*$/,""),keys:Object.keys(data).length,data:data};
+  var blob=new Blob([JSON.stringify(payload)],{type:"application/json"});
+  var d=new Date();var stamp=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="jotun-tools-backup-"+stamp+".json";a.click();
+  $("exp-status").className="status ok";$("exp-status").textContent="Backup downloaded \u00b7 "+Object.keys(data).length+" items";
+}
+
+var PENDING=null;
+$("drop").onclick=function(){$("file").click()};
+$("file").onchange=function(e){if(e.target.files[0])readBackup(e.target.files[0])};
+["dragover","dragenter"].forEach(function(ev){$("drop").addEventListener(ev,function(e){e.preventDefault();$("drop").classList.add("over")})});
+["dragleave","drop"].forEach(function(ev){$("drop").addEventListener(ev,function(e){e.preventDefault();$("drop").classList.remove("over")})});
+$("drop").addEventListener("drop",function(e){if(e.dataTransfer.files[0])readBackup(e.dataTransfer.files[0])});
+
+function readBackup(f){
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var o=JSON.parse(r.result);
+      var data=o&&o.data?o.data:o;
+      if(!data||typeof data!=="object")throw 0;
+      var keys=Object.keys(data);
+      if(!keys.length)throw 0;
+      PENDING=data;
+      renderPreview(o,keys);
+      $("imp-status").className="status";$("imp-status").textContent="";
+    }catch(e){
+      PENDING=null;$("restore-area").innerHTML="";
+      $("imp-status").className="status err";$("imp-status").textContent="That file is not a valid backup.";
+    }
+  };
+  r.readAsText(f);
+}
+function renderPreview(o,keys){
+  var when=o.created?new Date(o.created).toLocaleString():"unknown date";
+  var html='<div class="preview"><div class="ph">Backup from '+when+'</div>';
+  keys.forEach(function(k){
+    var meta=KNOWN[k];var name=meta?meta.n:k;
+    var det="";if(meta&&meta.c){try{det=meta.c(PENDING[k])}catch(e){}}
+    var exists=localStorage.getItem(k)!==null;
+    html+='<div class="prow"><input type="checkbox" class="rk" value="'+k+'" checked><div class="pn"><div style="font-weight:600">'+name+'</div><div class="pd">'+(det||k)+'</div></div><span class="tag '+(exists?"over":"new")+'">'+(exists?"OVERWRITE":"NEW")+'</span></div>';
+  });
+  html+='</div>';
+  html+='<div class="note a" style="margin-top:11px"><b>Restoring replaces what is on this device.</b> Anything marked OVERWRITE will lose its current contents. Download a backup of this device first if you are unsure.</div>';
+  html+='<div class="btnrow"><button class="btn" onclick="cancelRestore()">Cancel</button><button class="btn danger" onclick="doRestore()">Restore Selected</button></div>';
+  $("restore-area").innerHTML=html;
+}
+function cancelRestore(){PENDING=null;$("restore-area").innerHTML="";$("file").value="";$("imp-status").textContent=""}
+function doRestore(){
+  if(!PENDING)return;
+  var boxes=document.querySelectorAll(".rk");var chosen=[];
+  boxes.forEach(function(b){if(b.checked)chosen.push(b.value)});
+  if(!chosen.length){$("imp-status").className="status err";$("imp-status").textContent="Nothing selected.";return}
+  var over=chosen.filter(function(k){return localStorage.getItem(k)!==null}).length;
+  var msg="Restore "+chosen.length+" item"+(chosen.length!==1?"s":"")+"?";
+  if(over)msg+="\n\n"+over+" will overwrite data already on this device. This cannot be undone.";
+  if(!confirm(msg))return;
+  var done=0,failed=[];
+  chosen.forEach(function(k){try{localStorage.setItem(k,PENDING[k]);done++}catch(e){failed.push(k)}});
+  PENDING=null;$("restore-area").innerHTML="";$("file").value="";
+  renderList();
+  if(failed.length){$("imp-status").className="status err";$("imp-status").textContent=done+" restored, "+failed.length+" failed (storage may be full).";}
+  else{$("imp-status").className="status ok";$("imp-status").textContent=done+" item"+(done!==1?"s":"")+" restored \u00b7 reopen your tools to see the data.";}
+}
+
+// origin guidance
+(function(){
+  var w=$("origin-warn");
+  if(location.protocol==="file:"){
+    w.innerHTML='<div class="note a" style="margin:0 0 1rem"><b>Opened as a local file.</b> This page can only see data saved by tools opened the same way. To back up the tools you use at <b>owenkaolii.github.io</b>, upload this file there and open it from that address instead.</div>';
+  }
+})();
+renderList();
+</script>
+</body>
+</html>
