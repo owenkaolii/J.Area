@@ -17,8 +17,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 header { background: var(--text); padding: 18px 20px 16px; }
 .header-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 3px; }
 .header-sub { font-size: 12px; color: rgba(255,255,255,0.45); letter-spacing: 0.3px; }
-.home-btn { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 10px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5); text-decoration: none; letter-spacing: 0.3px; transition: color 0.15s; }
-.home-btn:hover { color: #fff; }
+.home-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px 6px 10px;margin-bottom:12px;background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.14);border-radius:8px;color:rgba(255,255,255,0.65);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.3px;text-decoration:none;transition:all 0.15s}
+.home-btn:hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.3);color:#fff}
+.home-btn svg{width:13px;height:13px}
 
 .search-bar { background: var(--surface); border-bottom: 0.5px solid var(--border); padding: 12px 16px; position: sticky; top: 0; z-index: 50; }
 .search-input { width: 100%; background: var(--input-bg); border: 0.5px solid var(--border2); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 10px 14px; outline: none; border-radius: 10px; transition: border-color 0.15s; }
@@ -59,12 +60,30 @@ main { max-width: 700px; margin: 0 auto; padding: 16px 16px 60px; }
 
 .empty-search { text-align: center; padding: 48px 20px; color: var(--muted); font-size: 13px; display: none; }
 .ref-note { font-size: 10px; color: var(--dim); text-align: center; padding: 16px; line-height: 1.6; }
+.disc-bar { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-bottom: 0.5px solid var(--border); background: var(--bg); }
+.disc-toggle { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border2); background: #fff; color: var(--text); cursor: pointer; }
+.disc-toggle.on { background: var(--text); color: #fff; border-color: var(--text); }
+.disc-active { font-size: 11px; color: #92400E; font-weight: 600; font-family: 'Space Grotesk', sans-serif; }
+.disc-clear { font-size: 11px; color: #991B1B; cursor: pointer; margin-left: auto; font-weight: 600; }
+.disc-panel { display: none; padding: 12px 16px 14px; background: #FFFBEB; border-bottom: 0.5px solid #F0E0C0; }
+.disc-panel.open { display: block; }
+.disc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 8px; }
+.disc-cell { display: flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #F0E0C0; border-radius: 8px; padding: 6px 9px; }
+.disc-cell label { font-size: 11.5px; color: var(--muted); flex: 1; font-weight: 500; }
+.disc-cell input { width: 46px; border: none; background: transparent; font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: var(--text); text-align: right; padding: 0; }
+.disc-cell input:focus { outline: none; }
+.disc-cell input::-webkit-outer-spin-button, .disc-cell input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.disc-cell span { font-size: 12px; color: var(--muted); }
+.disc-hint { font-size: 10.5px; color: #92400E; margin-top: 9px; line-height: 1.5; }
+.price-was { font-size: 10.5px; color: var(--dim); text-decoration: line-through; font-family: 'Space Grotesk', sans-serif; font-weight: 400; }
+.pack-price.net, .tinter-price.net { color: #166534; }
+.net-flag { display: inline-block; font-size: 8.5px; font-weight: 700; color: #92400E; letter-spacing: 0.3px; margin-left: 4px; vertical-align: middle; }
 </style>
 </head>
 <body>
 
 <header>
-  <a class="home-btn" href="index.html">← Home</a>
+  <a class="home-btn" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>Tools</a>
   <div class="header-title">Pricelist</div>
   <div class="header-sub">Jotun Decorative · Effective 15 May 2026</div>
 </header>
@@ -83,14 +102,73 @@ main { max-width: 700px; margin: 0 auto; padding: 16px 16px 60px; }
   <div class="cat-tab" onclick="filterCat('tinter',this)">Tinter</div>
 </div>
 
+<div class="disc-bar">
+  <button class="disc-toggle" id="disc-toggle" onclick="toggleDisc()">Discount</button>
+  <span class="disc-active" id="disc-active"></span>
+  <span class="disc-clear" id="disc-clear" style="display:none" onclick="clearDisc()">Clear all</span>
+</div>
+<div class="disc-panel" id="disc-panel">
+  <div class="disc-grid" id="disc-grid"></div>
+  <div class="disc-hint">Net prices shown in green with the list price struck through. Resets every time you open this page.</div>
+</div>
+
 <main>
   <div id="product-list"></div>
   <div class="empty-search" id="empty-search">No products found.</div>
-  <div class="ref-note">Ref: 1070/JILD/0426/JVSMKS · All prices include VAT 11% · Exclude regular discount</div>
+  <div class="ref-note">Ref: 1070/JILD/0426/JVSMKS · All prices include VAT 11% · List prices exclude regular discount</div>
 </main>
 
 <script>
 const fmt = n => n ? n.toLocaleString('id-ID') : '—';
+
+// Per-category discount. Deliberately NOT persisted - resets on every open.
+const DISC = { exterior:0, interior:0, wm:0, primer:0, thinner:0, tinter:0 };
+const DISC_LABELS = { exterior:'Exterior', interior:'Interior', wm:'W&M', primer:'Primer', thinner:'Thinner', tinter:'Tinter' };
+function net(price, cat) {
+  const d = DISC[cat] || 0;
+  if (!price || !d) return null;
+  return price * (1 - d / 100);
+}
+function priceCell(price, cat, cls) {
+  if (!price) return `<div class="${cls} empty">—</div>`;
+  const n = net(price, cat);
+  if (n === null) return `<div class="${cls}">${fmt(price)}</div>`;
+  return `<div class="price-was">${fmt(price)}</div><div class="${cls} net">${fmt(Math.round(n))}</div>`;
+}
+function buildDiscGrid() {
+  document.getElementById('disc-grid').innerHTML = Object.keys(DISC_LABELS).map(k =>
+    `<div class="disc-cell"><label>${DISC_LABELS[k]}</label><input type="number" id="d-${k}" min="0" max="100" step="0.5" placeholder="0" value="${DISC[k]||''}" oninput="setDisc('${k}',this.value)"><span>%</span></div>`
+  ).join('');
+}
+function setDisc(cat, val) {
+  let v = parseFloat(val);
+  if (isNaN(v) || v < 0) v = 0;
+  if (v > 100) v = 100;
+  DISC[cat] = v;
+  renderAll();
+  applyFilters();
+  updDiscBar();
+}
+function updDiscBar() {
+  const on = Object.keys(DISC).filter(k => DISC[k] > 0);
+  const bar = document.getElementById('disc-active');
+  const clr = document.getElementById('disc-clear');
+  const tog = document.getElementById('disc-toggle');
+  if (!on.length) { bar.textContent = ''; clr.style.display = 'none'; tog.classList.remove('on'); return; }
+  bar.textContent = on.map(k => DISC_LABELS[k] + ' −' + DISC[k] + '%').join('  ·  ');
+  clr.style.display = 'inline';
+  tog.classList.add('on');
+}
+function toggleDisc() {
+  document.getElementById('disc-panel').classList.toggle('open');
+}
+function clearDisc() {
+  Object.keys(DISC).forEach(k => DISC[k] = 0);
+  buildDiscGrid();
+  renderAll();
+  applyFilters();
+  updDiscBar();
+}
 
 const DATA = {
   exterior: {
@@ -317,7 +395,7 @@ function renderAll() {
           const price = variant.prices[sz];
           html += `<div class="pack-item">
             <div class="pack-size">${sz}</div>
-            <div class="pack-price ${price ? '' : 'empty'}">${price ? fmt(price) : '—'}</div>
+            ${priceCell(price, catKey, 'pack-price')}
           </div>`;
         }
         html += `</div></div>`;
@@ -335,7 +413,7 @@ function renderAll() {
   for (const t of tinters) {
     html += `<div class="tinter-row">
       <div class="tinter-name">${t.name}</div>
-      <div><div class="tinter-price">${fmt(t.price)}</div><div class="tinter-unit">/ bottle</div></div>
+      <div>${priceCell(t.price, 'tinter', 'tinter-price')}<div class="tinter-unit">/ bottle</div></div>
     </div>`;
   }
   html += `</div></div>`;
@@ -370,6 +448,7 @@ function applyFilters() {
   document.getElementById('empty-search').style.display = anyVisible ? 'none' : 'block';
 }
 
+buildDiscGrid();
 renderAll();
 </script>
 </body>
