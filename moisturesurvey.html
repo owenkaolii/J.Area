@@ -469,7 +469,7 @@ var RANGES=["<12%","12-15%","15-18%",">18%"];
 var RECS=["Surface ready for painting","Needs to dry further - re-check in 1-2 weeks","Scrapping required on affected area"];
 var CURSCREEN="projects";
 var SYSTEMS=["Majestic Primer + Essence Cover Plus","Majestic Primer + Majestic True Beauty Matt","Jotashield Primer + Jotashield Antifade Colour","Jotashield Primer + Jotashield Ultra Clean","Jotaplast Primer + Jotaplast","Custom / Other"];
-function save(){try{localStorage.setItem("msr4",JSON.stringify(S))}catch(e){}
+function save(){try{localStorage.setItem("msr4",JSON.stringify(S));localStorage.setItem("msr4_touched",new Date().toISOString())}catch(e){}
   if(typeof queuePush==="function")queuePush();}
 function load(){try{var d=localStorage.getItem("msr4");if(d)S=JSON.parse(d)}catch(e){}}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
@@ -666,51 +666,88 @@ async function doSignOut(){
   if(!confirm("Sign out? Your surveys stay on this device."))return;
   var c=sbClient();if(c)await c.auth.signOut();
   SESSION=null;
+  try{localStorage.removeItem("msr4_pushed")}catch(e){}
   syncUI("","Not signed in \u2014 saved on this device only");
 }
 
-/* Pull remote, compare, merge or push */
+/* Resolve local vs cloud by timestamp. Only asks on a genuine conflict. */
+function localTouched(){try{return localStorage.getItem("msr4_touched")||null}catch(e){return null}}
+function lastPushed(){try{return localStorage.getItem("msr4_pushed")||null}catch(e){return null}}
+function markPushed(t){try{localStorage.setItem("msr4_pushed",t||new Date().toISOString())}catch(e){}}
+function stripUI(o){var c=JSON.parse(JSON.stringify(o));c.cp=null;c.ct=null;c.cv=0;c.cu=null;return c}
+function stamp(iso){
+  if(!iso)return "";
+  var d=new Date(iso), now=new Date();
+  return d.toDateString()===now.toDateString()
+    ? d.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})
+    : d.toLocaleDateString([], {day:"2-digit",month:"short"});
+}
+function adopt(remote,when){
+  S=remote;
+  try{localStorage.setItem("msr4",JSON.stringify(S))}catch(e){}
+  markPushed(when);
+  renderHome();showScreen("home");
+  syncUI("on","Updated from cloud \u00b7 "+stamp(when));
+}
+
 async function firstSync(){
   var c=sbClient();if(!c||!SESSION)return;
   syncUI("busy","Checking cloud\u2026");
   try{
     var r=await c.from("tool_data").select("payload,updated_at").eq("tool_key",TOOL_KEY).maybeSingle();
     if(r.error)throw r.error;
+
     var localHas=(S.projects||[]).length>0;
+
     if(!r.data){
-      if(localHas){await pushNow();}
-      else{syncUI("on","Synced \u00b7 nothing stored yet")}
+      if(localHas)return pushNow();
+      syncUI("on","Synced \u00b7 nothing stored yet");return;
+    }
+
+    var remote=r.data.payload, remoteWhen=r.data.updated_at;
+    var remoteHas=(remote.projects||[]).length>0;
+
+    if(!localHas){ if(remoteHas)return adopt(remote,remoteWhen); syncUI("on","Synced"); return; }
+    if(!remoteHas) return pushNow();
+
+    if(JSON.stringify(stripUI(S))===JSON.stringify(stripUI(remote))){
+      markPushed(remoteWhen);
+      syncUI("on","Up to date \u00b7 "+stamp(remoteWhen));
       return;
     }
-    var remote=r.data.payload;
-    var remoteHas=(remote.projects||[]).length>0;
-    if(localHas&&remoteHas){
-      var lp=(S.projects||[]).length, rp=(remote.projects||[]).length;
-      var use=confirm("This device has "+lp+" project"+(lp!==1?"s":"")+".\nThe cloud has "+rp+".\n\nOK = use the cloud copy (replaces this device)\nCancel = keep this device and upload it");
-      if(use){S=remote;save();renderProjects();showScreen("home");syncUI("on","Synced from cloud")}
-      else{await pushNow()}
-    } else if(remoteHas){
-      S=remote;save();renderProjects();showScreen("home");syncUI("on","Synced from cloud");
-    } else {
-      await pushNow();
-    }
+
+    var touched=localTouched();
+    var pushed=lastPushed();
+
+    if(!touched || (pushed && touched<=pushed)) return adopt(remote,remoteWhen);
+    if(pushed && remoteWhen<=pushed) return pushNow();
+
+    var lp=(S.projects||[]).length, rp=(remote.projects||[]).length;
+    var keepCloud=confirm(
+      "Both copies changed since the last sync.\n\n"+
+      "This device: "+lp+" project"+(lp!==1?"s":"")+", edited "+stamp(touched)+"\n"+
+      "Cloud: "+rp+" project"+(rp!==1?"s":"")+", saved "+stamp(remoteWhen)+"\n\n"+
+      "OK = use the cloud copy\nCancel = keep this device and upload it");
+    if(keepCloud)adopt(remote,remoteWhen); else await pushNow();
+
   }catch(err){
     syncUI("err","Sync failed \u2014 working offline");
     console.error(err);
   }
 }
+
 async function pushNow(){
   var c=sbClient();if(!c||!SESSION)return false;
   if(SYNCING){DIRTY=true;return false}
   SYNCING=true;syncUI("busy","Saving to cloud\u2026");
   try{
-    var payload=JSON.parse(JSON.stringify(S));
-    payload.cp=null;payload.ct=null;payload.cv=0;payload.cu=null;   // don't sync UI position
+    var payload=stripUI(S);   // don't sync which screen you're on
     var r=await c.from("tool_data").upsert({
       user_id:SESSION.user.id, tool_key:TOOL_KEY, payload:payload, updated_at:new Date().toISOString()
     },{onConflict:"user_id,tool_key"});
     if(r.error)throw r.error;
     SYNCING=false;
+    markPushed();
     syncUI("on","Synced \u00b7 "+new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}));
     if(DIRTY){DIRTY=false;return pushNow()}
     return true;
