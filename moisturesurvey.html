@@ -170,6 +170,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 @media print{.topbar,.report-tabs,.btn,.overlay{display:none!important}body{background:#fff}.rpt-section{border:1px solid #ccc}}
 @media(max-width:420px){.detail-wall-row{grid-template-columns:1fr 54px 44px 40px}.detail-rec{display:none}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  .sync-bar{display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:14px;border-top:0.5px solid var(--border)}
+  .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--border2);flex-shrink:0}
+  .sync-dot.on{background:#16A34A}
+  .sync-dot.busy{background:#CA8A04}
+  .sync-dot.err{background:#B4231F}
+  .sync-txt{flex:1;font-size:11.5px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sync-modal{position:fixed;inset:0;background:rgba(10,10,10,.62);display:none;align-items:center;justify-content:center;z-index:200;padding:1.2rem}
+  .sync-modal.on{display:flex}
+  .sync-card{background:#FFFFFF;border:0.5px solid var(--border2);box-shadow:0 8px 32px rgba(0,0,0,.18);border-radius:14px;padding:20px;max-width:380px;width:100%}
+  .sync-card h3{font-size:16px;font-weight:600;margin-bottom:4px}
+  .sync-card .sub{font-size:12.5px;color:var(--muted);line-height:1.55;margin-bottom:14px}
+  .sync-card .field{margin-bottom:11px}
+  .sync-card label{display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+  .sync-card input{width:100%;background:var(--input-bg);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:15px;color:var(--text)}
+  .sync-msg{font-size:12px;margin-top:9px;line-height:1.5;display:none}
+  .sync-msg.on{display:block}
+  .sync-msg.err{color:#B4231F}
+  .sync-msg.ok{color:#166534}
+</style>
 </head>
 <body>
 
@@ -185,7 +206,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <button class="btn btn-primary btn-sm" onclick="openModal('m-project')">+ New Project</button>
     </div>
     <div id="project-list"></div>
-    <div style="display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:0.5px solid var(--border)">
+    <div class="sync-bar">
+      <span class="sync-dot" id="sync-dot"></span>
+      <span class="sync-txt" id="sync-txt">Not signed in &mdash; saved on this device only</span>
+      <button class="btn btn-ghost btn-sm" id="sync-btn" onclick="openSync()">Sign in</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px;padding-top:16px;border-top:0.5px solid var(--border)">
       <button class="btn btn-ghost btn-sm" onclick="exportData()" style="flex:1">&darr; Export Backup</button>
       <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()" style="flex:1">&uarr; Import Backup</button>
       <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(this)">
@@ -420,6 +446,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
+<div class="sync-modal" id="sync-modal">
+  <div class="sync-card">
+    <h3 id="sync-title">Sync across devices</h3>
+    <div class="sub" id="sync-sub">Sign in to keep surveys on your phone and laptop in step. Everything keeps working offline &mdash; changes upload when you reconnect.</div>
+    <div id="sync-form">
+      <div class="field"><label>Email</label><input type="email" id="sync-email" autocomplete="username"></div>
+      <div class="field"><label>Password</label><input type="password" id="sync-pass" autocomplete="current-password"></div>
+    </div>
+    <div class="sync-msg" id="sync-msg"></div>
+    <div style="display:flex;gap:7px;margin-top:14px">
+      <button class="btn btn-ghost btn-sm" onclick="closeSync()" style="flex:1">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="sync-go" onclick="doSignIn()" style="flex:1">Sign in</button>
+    </div>
+  </div>
+</div>
+
 <script>
 var S={projects:[],cp:null,ct:null,cv:0,cu:null};
 var WEATHER=["Sunny","Cloudy","Rainy","Partly Rainy"];
@@ -427,7 +469,8 @@ var RANGES=["<12%","12-15%","15-18%",">18%"];
 var RECS=["Surface ready for painting","Needs to dry further - re-check in 1-2 weeks","Scrapping required on affected area"];
 var CURSCREEN="projects";
 var SYSTEMS=["Majestic Primer + Essence Cover Plus","Majestic Primer + Majestic True Beauty Matt","Jotashield Primer + Jotashield Antifade Colour","Jotashield Primer + Jotashield Ultra Clean","Jotaplast Primer + Jotaplast","Custom / Other"];
-function save(){try{localStorage.setItem("msr4",JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem("msr4",JSON.stringify(S))}catch(e){}
+  if(typeof queuePush==="function")queuePush();}
 function load(){try{var d=localStorage.getItem("msr4");if(d)S=JSON.parse(d)}catch(e){}}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
 function showScreen(id){CURSCREEN=id;document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active")});document.getElementById("screen-"+id).classList.add("active")}
@@ -568,6 +611,141 @@ function saveObs(val){curType().visits[S.cv].obs=val;save()}
 function exportData(){if(!S.projects.length){alert("No projects to export.");return}var data=JSON.stringify({app:"moisture_survey",version:4,exported:new Date().toISOString(),projects:S.projects},null,2);var blob=new Blob([data],{type:"application/json"});var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download="moisture_survey_backup_"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}
 function importData(input){var file=input.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){try{var data=JSON.parse(e.target.result);var imp=data.projects||data;if(!Array.isArray(imp))throw new Error("Unrecognized file");var existing=S.projects.length;if(existing>0){var choice=confirm("You have "+existing+" project(s).\n\nOK = MERGE with existing.\nCancel = REPLACE everything.");if(!choice){S.projects=imp}else{var ids=new Set(S.projects.map(function(p){return p.id}));imp.forEach(function(p){if(ids.has(p.id))p.id=p.id+"_"+Math.random().toString(36).slice(2,5);S.projects.push(p)})}}else{S.projects=imp}save();renderHome();alert("Import successful. "+imp.length+" project(s) loaded.")}catch(err){alert("Import failed: "+err.message)}input.value=""};reader.readAsText(file)}
 load();renderHome();
+
+/* ═══════════════ CLOUD SYNC (optional, local-first) ═══════════════ */
+var SB_URL="https://qxgjtqlgkoqqrqlyewre.supabase.co";
+var SB_KEY="sb_publishable_I3xaYTSQ_K0Z2eRiojIPRw_IkcIa7T9";
+var TOOL_KEY="moisture_survey";
+var sb=null, SESSION=null, SYNCING=false, DIRTY=false;
+
+function sbClient(){
+  if(sb)return sb;
+  if(typeof supabase==="undefined")return null;
+  sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,storageKey:"pt_auth"}});
+  return sb;
+}
+function syncUI(state,text){
+  var d=document.getElementById("sync-dot"),t=document.getElementById("sync-txt"),b=document.getElementById("sync-btn");
+  if(!d)return;
+  d.className="sync-dot"+(state?" "+state:"");
+  t.textContent=text;
+  b.textContent=SESSION?"Sign out":"Sign in";
+  b.setAttribute("onclick",SESSION?"doSignOut()":"openSync()");
+}
+function openSync(){
+  document.getElementById("sync-modal").classList.add("on");
+  document.getElementById("sync-msg").className="sync-msg";
+  var e=document.getElementById("sync-email");if(e&&!e.value)e.focus();
+}
+function closeSync(){document.getElementById("sync-modal").classList.remove("on")}
+function syncMsg(t,kind){
+  var m=document.getElementById("sync-msg");
+  m.textContent=t;m.className="sync-msg on "+(kind||"");
+}
+async function doSignIn(){
+  var c=sbClient();
+  if(!c){syncMsg("Can't reach the sync service. Check your connection and reload.","err");return}
+  var email=document.getElementById("sync-email").value.trim();
+  var pass=document.getElementById("sync-pass").value;
+  if(!email||!pass){syncMsg("Enter your email and password.","err");return}
+  document.getElementById("sync-go").disabled=true;
+  syncMsg("Signing in\u2026");
+  try{
+    var r=await c.auth.signInWithPassword({email:email,password:pass});
+    if(r.error)throw r.error;
+    SESSION=r.data.session;
+    document.getElementById("sync-pass").value="";
+    closeSync();
+    await firstSync();
+  }catch(err){
+    syncMsg(err.message||"Sign in failed.","err");
+  }
+  document.getElementById("sync-go").disabled=false;
+}
+async function doSignOut(){
+  if(!confirm("Sign out? Your surveys stay on this device."))return;
+  var c=sbClient();if(c)await c.auth.signOut();
+  SESSION=null;
+  syncUI("","Not signed in \u2014 saved on this device only");
+}
+
+/* Pull remote, compare, merge or push */
+async function firstSync(){
+  var c=sbClient();if(!c||!SESSION)return;
+  syncUI("busy","Checking cloud\u2026");
+  try{
+    var r=await c.from("tool_data").select("payload,updated_at").eq("tool_key",TOOL_KEY).maybeSingle();
+    if(r.error)throw r.error;
+    var localHas=(S.projects||[]).length>0;
+    if(!r.data){
+      if(localHas){await pushNow();}
+      else{syncUI("on","Synced \u00b7 nothing stored yet")}
+      return;
+    }
+    var remote=r.data.payload;
+    var remoteHas=(remote.projects||[]).length>0;
+    if(localHas&&remoteHas){
+      var lp=(S.projects||[]).length, rp=(remote.projects||[]).length;
+      var use=confirm("This device has "+lp+" project"+(lp!==1?"s":"")+".\nThe cloud has "+rp+".\n\nOK = use the cloud copy (replaces this device)\nCancel = keep this device and upload it");
+      if(use){S=remote;save();renderProjects();showScreen("home");syncUI("on","Synced from cloud")}
+      else{await pushNow()}
+    } else if(remoteHas){
+      S=remote;save();renderProjects();showScreen("home");syncUI("on","Synced from cloud");
+    } else {
+      await pushNow();
+    }
+  }catch(err){
+    syncUI("err","Sync failed \u2014 working offline");
+    console.error(err);
+  }
+}
+async function pushNow(){
+  var c=sbClient();if(!c||!SESSION)return false;
+  if(SYNCING){DIRTY=true;return false}
+  SYNCING=true;syncUI("busy","Saving to cloud\u2026");
+  try{
+    var payload=JSON.parse(JSON.stringify(S));
+    payload.cp=null;payload.ct=null;payload.cv=0;payload.cu=null;   // don't sync UI position
+    var r=await c.from("tool_data").upsert({
+      user_id:SESSION.user.id, tool_key:TOOL_KEY, payload:payload, updated_at:new Date().toISOString()
+    },{onConflict:"user_id,tool_key"});
+    if(r.error)throw r.error;
+    SYNCING=false;
+    syncUI("on","Synced \u00b7 "+new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}));
+    if(DIRTY){DIRTY=false;return pushNow()}
+    return true;
+  }catch(err){
+    SYNCING=false;
+    syncUI("err", navigator.onLine?"Sync failed \u2014 saved on device":"Offline \u2014 will sync later");
+    console.error(err);
+    return false;
+  }
+}
+
+/* debounce pushes so typing doesn't hammer the network */
+var _pt=null;
+function queuePush(){
+  if(!SESSION)return;
+  clearTimeout(_pt);
+  _pt=setTimeout(function(){ if(navigator.onLine)pushNow(); else syncUI("err","Offline \u2014 will sync later"); },2500);
+}
+
+/* restore an existing session on load */
+async function initSync(){
+  var c=sbClient();
+  if(!c){syncUI("","Sync unavailable offline");return}
+  try{
+    var r=await c.auth.getSession();
+    if(r.data&&r.data.session){SESSION=r.data.session;await firstSync();}
+    else syncUI("","Not signed in \u2014 saved on this device only");
+  }catch(e){syncUI("","Not signed in \u2014 saved on this device only")}
+}
+window.addEventListener("online",function(){ if(SESSION)pushNow(); });
+window.addEventListener("offline",function(){ if(SESSION)syncUI("err","Offline \u2014 will sync later"); });
+document.getElementById("sync-modal").addEventListener("click",function(e){ if(e.target.id==="sync-modal")closeSync(); });
+document.getElementById("sync-pass").addEventListener("keydown",function(e){ if(e.key==="Enter")doSignIn(); });
+initSync();
+
 </script>
 </body>
 </html>
