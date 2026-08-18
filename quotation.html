@@ -43,6 +43,16 @@ h1{font-family:var(--display);font-size:21px;font-weight:600}
 .f{flex:1;min-width:130px}
 .f.sm{flex:0 0 100px;min-width:100px}
 .f.xs{flex:0 0 78px;min-width:78px}
+.f.dt{flex:0 0 190px;min-width:190px}
+.f input[type="date"]{
+  min-width:0;max-width:100%;
+  -webkit-appearance:none;appearance:none;
+  text-align:left;font-variant-numeric:tabular-nums;
+}
+@supports (-webkit-touch-callout:none){
+  /* iOS/iPadOS renders the native date control wider than the box */
+  .f input[type="date"]{padding-right:6px;font-size:13.5px}
+}
 .f label{display:block;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
 .f input,.f select,.f textarea{width:100%;background:var(--input);border:1px solid var(--border2);border-radius:8px;padding:9px 10px;font-family:var(--font);font-size:14px;color:var(--text)}
 .f input.num{font-variant-numeric:tabular-nums;text-align:right}
@@ -116,7 +126,7 @@ table.q tr.total td{font-weight:700;background:#f4f6f8}
   <div class="panel">
     <h2>Customer</h2>
     <div class="row">
-      <div class="f"><label>Date</label><input type="date" id="q-date"></div>
+      <div class="f dt"><label>Date</label><input type="date" id="q-date"></div>
       <div class="f"><label>Kepada</label><input id="q-to" placeholder="PT. Nama Perusahaan"></div>
       <div class="f"><label>Proyek</label><input id="q-proj" placeholder="Nama Proyek"></div>
     </div>
@@ -129,6 +139,7 @@ table.q tr.total td{font-weight:700;background:#f4f6f8}
       <div class="f sm"><label>Pack</label><select id="l-size"></select></div>
       <div class="f"><label>Colour</label><input id="l-colour" placeholder="9904 Twilight / White"></div>
       <div class="f"><label>Price / pack (Rp)</label><input class="num" type="number" id="l-price" placeholder="from tinting machine"></div>
+      <div class="f xs"><label>Disc %</label><input class="num" type="number" id="l-disc" step="0.5" min="0" max="100" placeholder="0"></div>
       <div class="f xs"><label>Qty</label><input class="num" type="number" id="l-qty" value="1" min="1"></div>
       <div class="f xs" style="display:flex;align-items:flex-end"><button class="btn gold" style="width:100%" onclick="addLine()">Add</button></div>
     </div>
@@ -186,6 +197,8 @@ function fmt(n){return Math.round(n||0).toLocaleString("en-US")}
 function f2(n){var v=Math.round((n||0)*100)/100;return v.toLocaleString("en-US",{maximumFractionDigits:2})}
 function esc(s){return (s==null?"":""+s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 function sizeLabel(s){return (s%1===0?s:s)+"L"}
+/* the price the customer sees: list price less this line's discount */
+function netPrice(l){var d=l.disc||0; return Math.round((l.price||0)*(1-d/100))}
 
 function saveState(){try{localStorage.setItem(KEY,JSON.stringify({
   lines:LINES,to:$("q-to").value,proj:$("q-proj").value,date:$("q-date").value,
@@ -226,8 +239,10 @@ function addLine(){
   var price=parseFloat($("l-price").value)||0, qty=parseInt($("l-qty").value)||0;
   if(!qty){$("l-qty").focus();return}
   if(!price){$("l-price").focus();return}
+  var disc=parseFloat($("l-disc").value)||0;
+  if(disc<0)disc=0; if(disc>100)disc=100;
   LINES.push({product:p.name,spec:p.spec,resin:p.resin,size:s.size,
-              colour:$("l-colour").value.trim()||"White",price:price,qty:qty});
+              colour:$("l-colour").value.trim()||"White",price:price,disc:disc,qty:qty});
   $("l-colour").value="";$("l-qty").value=1;
   render();$("l-colour").focus();
 }
@@ -235,21 +250,31 @@ function delLine(i){LINES.splice(i,1);render()}
 function moveLine(i,d){var j=i+d;if(j<0||j>=LINES.length)return;var t=LINES[i];LINES[i]=LINES[j];LINES[j]=t;render()}
 function editQty(i,v){LINES[i].qty=parseInt(v)||0;render()}
 function editPrice(i,v){LINES[i].price=parseFloat(v)||0;render()}
+function editDisc(i,v){var d=parseFloat(v)||0;if(d<0)d=0;if(d>100)d=100;LINES[i].disc=d;render()}
 
 function renderLines(){
   var c=$("lines");
   if(!LINES.length){c.innerHTML='<div class="empty">No lines yet. Add products above.</div>';return}
-  var h='<table class="lines-tbl"><thead><tr><th></th><th>Product</th><th>Colour</th><th>Pack</th><th class="r">Qty</th><th class="r">Litre</th><th class="r">Price</th><th class="r">Total</th><th></th></tr></thead><tbody>';
+  var h='<table class="lines-tbl"><thead><tr><th></th><th>Product</th><th>Colour</th><th>Pack</th><th class="r">Qty</th><th class="r">Litre</th><th class="r">List price</th><th class="r">Disc %</th><th class="r">Net price</th><th class="r">Total</th><th></th></tr></thead><tbody>';
   LINES.forEach(function(l,i){
     h+='<tr><td style="color:var(--muted)">'+(i+1)+'</td>'+
       '<td>'+esc(l.product)+'</td><td>'+esc(l.colour)+'</td><td>'+sizeLabel(l.size)+'</td>'+
       '<td class="r"><input class="num" type="number" value="'+l.qty+'" min="1" style="width:60px;padding:4px 6px" onchange="editQty('+i+',this.value)"></td>'+
       '<td class="r">'+f2(l.size*l.qty)+'</td>'+
-      '<td class="r"><input class="num" type="number" value="'+l.price+'" style="width:110px;padding:4px 6px" onchange="editPrice('+i+',this.value)"></td>'+
-      '<td class="r">'+fmt(l.price*l.qty)+'</td>'+
+      '<td class="r"><input class="num" type="number" value="'+l.price+'" style="width:104px;padding:4px 6px" onchange="editPrice('+i+',this.value)"></td>'+
+      '<td class="r"><input class="num" type="number" value="'+(l.disc||0)+'" step="0.5" min="0" max="100" style="width:62px;padding:4px 6px" onchange="editDisc('+i+',this.value)"></td>'+
+      '<td class="r"'+((l.disc||0)>0?' style="color:var(--green);font-weight:600"':'')+'>'+fmt(netPrice(l))+'</td>'+
+      '<td class="r">'+fmt(netPrice(l)*l.qty)+'</td>'+
       '<td style="white-space:nowrap"><span class="act" onclick="moveLine('+i+',-1)">↑</span><span class="act" onclick="moveLine('+i+',1)">↓</span><span class="act" onclick="delLine('+i+')">✕</span></td></tr>';
   });
   h+='</tbody></table>';
+  var gross=LINES.reduce(function(a,l){return a+(l.price||0)*l.qty},0);
+  var net=LINES.reduce(function(a,l){return a+netPrice(l)*l.qty},0);
+  if(gross>net){
+    h+='<div class="warn" style="background:var(--greenbg);border-color:#CDE9D5;color:var(--green)">'+
+       'Discount applied: Rp '+fmt(gross-net)+' off Rp '+fmt(gross)+' &rarr; <b>Rp '+fmt(net)+'</b>. '+
+       'The quotation shows net prices only &mdash; no discount is printed.</div>';
+  }
   c.innerHTML=h;
 }
 
@@ -292,7 +317,8 @@ function renderDoc(){
   var n=0,totQty=0,totAmt=0,totLtr=0;
   grouped().forEach(function(g){
     g.rows.forEach(function(l,ri){
-      n++;totQty+=l.qty;totAmt+=l.price*l.qty;totLtr+=l.size*l.qty;
+      var np=netPrice(l);
+      n++;totQty+=l.qty;totAmt+=np*l.qty;totLtr+=l.size*l.qty;
       h+='<tr><td class="c">'+n+'</td>';
       if(ri===0){
         h+='<td class="prod" rowspan="'+g.rows.length+'">'+esc(g.product)+'</td>';
@@ -302,8 +328,8 @@ function renderDoc(){
       if(showColour)h+='<td>'+esc(l.colour)+'</td>';
       h+='<td class="c">'+sizeLabel(l.size)+'</td>';
       if(showLitre)h+='<td class="r">'+f2(l.size*l.qty)+'</td>';
-      if(showPrice)h+='<td class="r">Rp&nbsp;'+fmt(l.price)+'</td>';
-      h+='<td class="c">'+l.qty+'</td><td class="r">Rp&nbsp;'+fmt(l.price*l.qty)+'</td></tr>';
+      if(showPrice)h+='<td class="r">Rp&nbsp;'+fmt(np)+'</td>';
+      h+='<td class="c">'+l.qty+'</td><td class="r">Rp&nbsp;'+fmt(np*l.qty)+'</td></tr>';
     });
   });
 
@@ -386,7 +412,7 @@ function resetAll(){
 }
 
 ["q-to","q-proj","q-date","q-cond","q-sign"].forEach(function(id){$(id).addEventListener("input",render)});
-["l-colour","l-qty","l-price"].forEach(function(id){
+["l-colour","l-qty","l-price","l-disc"].forEach(function(id){
   $(id).addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();addLine()}});
 });
 
